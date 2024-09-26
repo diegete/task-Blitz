@@ -1,0 +1,202 @@
+/* Fondo con degradado */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  font-family: Arial, sans-serif;
+}
+
+/* Contenedor para mantener el formulario centrado */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Estilos del formulario */
+form {
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo con transparencia */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+/* Estilos de los campos */
+input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6a11cb;
+  box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
+}
+
+/* Estilo de las etiquetas */
+label {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Botón de envío */
+button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #6a11cb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:enabled {
+  background-color: #2575fc;
+}
+
+
+/* Estilo responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+  form {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  button {
+    font-size: 0.9rem;
+  }
+}
+/* Estilos del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7); /* Fondo oscuro para el overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh; /* Limitar la altura del modal */
+  overflow-y: auto; /* Habilitar scroll si el contenido es demasiado largo */
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.modal-content .form-group {
+  margin-bottom: 1.2rem;
+}
+
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #6a11cb;
+  outline: none;
+}
+
+.modal-content button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #6a11cb;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+  background-color: #2575fc;
+}
+
+.modal-content .btn-secondary {
+  background-color: #888;
+}
+
+.modal-content .btn-secondary:hover {
+  background-color: #555;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 1.5rem;
+    max-width: 90%; /* Reducir el ancho en pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1rem;
+    max-width: 95%; /* Aún más pequeño en móviles */
+  }
+
+  .modal-content button {
+    padding: 0.6rem;
+    font-size: 0.9rem; /* Reducir tamaño del botón */
+  }
+}
+
+
+.btn:disabled {
+  background-color: #d6d6d6; /* Color de fondo gris */
+  color: #a1a1a1; /* Color de texto gris */
+  cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
+}

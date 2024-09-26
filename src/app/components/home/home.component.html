@@ -1,0 +1,11 @@
+<p>home works!</p>
+
+
+@if (userData) {
+  <h2>Bienvenido, {{ userData.name }}!</h2>
+  <p>Username: {{ userData.username }}</p>
+  <p>Email: {{ userData.email }}</p>
+  <p>Tipo de Usuario: {{ userData.user_type }}</p>
+}@else {
+  <p>No has iniciado sesión.</p>
+}
