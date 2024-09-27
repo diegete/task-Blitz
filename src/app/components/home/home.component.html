@@ -1,12 +1,36 @@
 <p>home works!</p>
-
-
 @if (userData) {
-  <h2>Bienvenido, {{ userData.name }}!</h2>
-  <p>Username: {{ userData.username }}</p>
-  <p>Email: {{ userData.email }}</p>
-  <p>Tipo de Usuario: {{ userData.user_type }}</p>
-  <p>hola</p>
+  <p>Hola {{userData.username}}</p>
+}
+@else {
+  <p>No user data</p>
+}
+
+@if (userData && userData.profile.user_type === 'jefe') {
+  <div>
+      <h2>Crear una nueva tarea</h2>
+  <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+    <div class="form-group">
+      <label for="titulo">Título de la tarea</label>
+      <input id="titulo" formControlName="titulo" type="text" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" formControlName="descripcion" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="carga">Carga</label>
+      <input id="carga" formControlName="carga" type="number" class="form-control" required min="1" max="10">
+    </div>
+    <div class="form-group">
+      <label for="proyecto">Proyecto</label>
+      <select id="proyecto" formControlName="proyecto" class="form-control" required>
+        <option *ngFor="let proyecto of userData.proyectos" [value]="proyecto.id">{{ proyecto.title }}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">Crear Tarea</button>
+  </form>
+  </div>
 }@else {
-  <p>No has iniciado sesión.</p>
+  <p>No has iniciado sesión o no eres un usuario jefe.</p>
 }
