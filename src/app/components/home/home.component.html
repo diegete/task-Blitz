@@ -1,10 +1,4 @@
-<p>home works!</p>
-@if (userData) {
-  <p>Hola {{userData.username}}</p>
-}
-@else {
-  <p>No user data</p>
-}
+
 
 @if (userData && userData.profile.user_type === 'jefe') {
   <div>
@@ -33,4 +27,31 @@
   </div>
 }@else {
   <p>No has iniciado sesión o no eres un usuario jefe.</p>
+}
+
+
+@if (userData.profile.user_type === 'jefe') {
+  <div>
+    <h2>Crear una nuevo proyecto</h2>
+  <form [formGroup]="projectForm" (ngSubmit)="crearProyecto()">
+  <div class="form-group">
+    <label for="title">Título del proyecto:</label>
+    <input id="title" formControlName="title" type="text" class="form-control" required>
+  </div>
+  <!-- <div class="form-group">
+    <label for="owner">Descripción</label>
+    <textarea id="descripcion" formControlName="descripcion" class="form-control" required></textarea>
+  </div> -->
+  <!-- <div class="form-group">
+    <label for="proyecto">Proyecto</label>
+    <select id="proyecto" formControlName="proyecto" class="form-control" required>
+      <option *ngFor="let proyecto of userData.proyectos" [value]="proyecto.id">{{ proyecto.title }}</option>
+    </select>
+  </div> -->
+  <button type="submit" class="btn btn-primary" [disabled]="projectForm.invalid">Crear proyecto</button>
+  </form>
+  </div>
+}
+@else {
+
 }
