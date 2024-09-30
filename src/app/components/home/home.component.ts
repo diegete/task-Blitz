@@ -22,20 +22,25 @@ export class HomeComponent {
     owner: '',
     members: [],
   }
-  
+  //
+
   constructor(
     private userService: UserdataService,
     private taskService: CreateTasksService,
     private proyectService: CreateProyectService,
     private formBuilder: FormBuilder,
   ) {
+
     // Inicializar el formulario de creación de tareas
     this.taskForm = this.formBuilder.group({
-      titulo: ['', [Validators.required]],
-      descripcion: ['', [Validators.required]],
-      carga: ['', [Validators.required, Validators.min(1), Validators.max(10)]],
-      proyecto: ['', Validators.required]
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      carga: [Number, Validators.required],
+      proyecto: [null, Validators.required],  // Asegúrate de que este campo esté aquí
     });
+
+
+
     // Inicializar el formulario de creación de proyectos
     this.projectForm = this.formBuilder.group({
       title: ['', [Validators.required]],
@@ -43,31 +48,50 @@ export class HomeComponent {
       // members: ['',[Validators.required]]
     })
   }
+
+
   // validación de usuario logeado y validaciones
   ngOnInit(): void {
     if (this.userService.isLoggedIn()) {
       this.userService.getUserData().subscribe(data => {
         this.userData = data;
-        console.log('Datos del usuario:', this.userData);  // Asegúrate de que userData tiene un ID
+        console.log('Datos del usuario:', this.userData.proyectos);  // Asegúrate de que userData tiene un ID
+
       });
     } else {
       console.log('No hay un usuario autenticado');
     }
   }
+
+
+
   // Método para crear una tarea
   createTask(): void {
     const token = localStorage.getItem('token');
+  
+    let taskData = {
+        titulo: this.taskForm.value.titulo,
+        descripcion: this.taskForm.value.descripcion,
+        carga: this.taskForm.value.carga,
+        proyecto: parseInt(this.taskForm.value.proyecto, 10),  // Convertir a número entero
+    };
+  
+    console.log('Datos que se enviarán:', taskData);
+  
     if (token) {
-      this.taskService.createTask(this.taskForm.value, token).subscribe(response => {
-        console.log('Tarea creada:', response);
-      }, error => {
-        console.error('Error al crear la tarea:', error);
-      });
+        this.taskService.createTask(taskData, token).subscribe(response => {
+            console.log('Tarea creada:', response);
+        }, error => {
+            console.error('Error al crear la tarea:', error);
+        });
     } else {
-      console.error('No se encontró un token');
+        console.error('No se encontró un token');
     }
-  }
+}
+  
+  
 
+   
   crearProyecto(): void {
     const token = localStorage.getItem('token');
  

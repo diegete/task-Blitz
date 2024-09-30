@@ -7,10 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class CreateTasksService {
 
-  private apiUrl = 'http://localhost:8000/assign-task/';
-
+  private apiUrl = 'http://localhost:8000/create-task/'
+  
   constructor(private http: HttpClient) {}
-
   // Método para crear una tarea
   createTask(taskData: any, token: string): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
