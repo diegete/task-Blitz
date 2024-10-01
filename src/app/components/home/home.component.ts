@@ -22,8 +22,12 @@ export class HomeComponent {
     owner: '',
     members: [],
   }
-  //
-
+  selectedProject: any = null;
+  selectedProjectTasks: any[] = [];
+  isProjectModalOpen = false;
+  isTaskModalOpen = false;
+  showTaskForm: boolean = false;
+  
   constructor(
     private userService: UserdataService,
     private taskService: CreateTasksService,
@@ -35,8 +39,8 @@ export class HomeComponent {
     this.taskForm = this.formBuilder.group({
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
-      carga: [Number, Validators.required],
-      proyecto: [null, Validators.required],  // Asegúrate de que este campo esté aquí
+      carga: [null, Validators.required],
+      proyecto: [null]
     });
 
 
@@ -44,8 +48,8 @@ export class HomeComponent {
     // Inicializar el formulario de creación de proyectos
     this.projectForm = this.formBuilder.group({
       title: ['', [Validators.required]],
-      // owner: ['', [Validators.required]],
-      // members: ['',[Validators.required]]
+      // owner: ['', [Validators.required]], esto esta para futuras mejoras 
+      // members: ['',[Validators.required]]  
     })
   }
 
@@ -55,7 +59,8 @@ export class HomeComponent {
     if (this.userService.isLoggedIn()) {
       this.userService.getUserData().subscribe(data => {
         this.userData = data;
-        console.log('Datos del usuario:', this.userData.proyectos);  // Asegúrate de que userData tiene un ID
+        this.get_task();
+        console.log('Datos del usuario:', this.userData.proyectos);  // se verifica que exitan los datos
 
       });
     } else {
@@ -65,33 +70,32 @@ export class HomeComponent {
 
 
 
-  // Método para crear una tarea
-  createTask(): void {
-    const token = localStorage.getItem('token');
-  
-    let taskData = {
-        titulo: this.taskForm.value.titulo,
-        descripcion: this.taskForm.value.descripcion,
-        carga: this.taskForm.value.carga,
-        proyecto: parseInt(this.taskForm.value.proyecto, 10),  // Convertir a número entero
-    };
-  
-    console.log('Datos que se enviarán:', taskData);
-  
-    if (token) {
-        this.taskService.createTask(taskData, token).subscribe(response => {
-            console.log('Tarea creada:', response);
-        }, error => {
-            console.error('Error al crear la tarea:', error);
-        });
-    } else {
-        console.error('No se encontró un token');
-    }
-}
-  
-  
 
-   
+
+openProjectModal(): void {
+  this.isProjectModalOpen = true;
+}
+
+closeProjectModal(): void {
+  this.isProjectModalOpen = false;
+}
+
+// Método para abrir y cerrar el modal de tareas
+openTaskModal(): void {
+  this.isTaskModalOpen = true;
+}
+
+closeTaskModal(): void {
+  this.isTaskModalOpen = false;
+}
+    
+  // Método para seleccionar un proyecto
+  selectProject(proyecto: any): void {
+    this.selectedProject = proyecto;
+    this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
+    console.log('Tareas filtradas del proyecto seleccionado:', this.selectedProjectTasks);
+  }
+   // Metodo crear proyecto
   crearProyecto(): void {
     const token = localStorage.getItem('token');
  
@@ -117,5 +121,46 @@ export class HomeComponent {
       console.error('No se encontraron datos válidos para el proyecto.');
     }
   }
+    // Método para crear una tarea
+    createTask(): void {
+      const token = localStorage.getItem('token');
+    
+      let taskData = {
+          titulo: this.taskForm.value.titulo,
+          descripcion: this.taskForm.value.descripcion,
+          carga: this.taskForm.value.carga,
+          proyecto: this.selectedProject.id
+      };
+    
+      console.log('Datos que se enviarán:', taskData);
+    
+      if (token) {
+          this.taskService.createTask(taskData, token).subscribe(response => {
+              console.log('Tarea creada:', response);
+              this.get_task(); // Volver a cargar las tareas
+          }, error => {
+              console.error('Error al crear la tarea:', error);
+          });
+      } else {
+          console.error('No se encontró un token');
+      }
+  }
+
+  get_task(): void {
+    const token = localStorage.getItem('token');
+  
+    if (token) {
+      this.taskService.gettask(token).subscribe(response => {
+        console.log('Tareas obtenidas:', response);  // Aquí recibes la lista de tareas
+        // Asigna las tareas obtenidas a una variable si necesitas mostrarlas
+        this.userData.tareas = response.tareas;
+      }, error => {
+        console.error('Error al obtener las tareas:', error);
+      });
+    } else {
+      console.error('No se encontró un token');
+    }
+  }
+  
   
 }

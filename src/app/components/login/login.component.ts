@@ -50,6 +50,7 @@ export class LoginComponent {
       (response) => {
         console.log('Inicio de sesión extitoso',response);
         this.authService.setToken(response.access);//guardamos el token 
+
         console.log('Token guardado:', this.authService.getToken());// revisamos si se guardo con exito 
         this.router.navigate(['/home'])
       }
@@ -75,11 +76,6 @@ export class LoginComponent {
     });
 
     
-  }
-
-  algo(){
-    this.userData = this.modalForm.value
-    console.log(this.userData);
   }
 
 
@@ -109,6 +105,7 @@ export class LoginComponent {
   openModal() {
     this.isModalOpen = true;
   }
+
 
 }
   
