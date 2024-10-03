@@ -16,6 +16,7 @@ export class HomeComponent {
   userData: any;
   taskForm: FormGroup;
   projectForm: FormGroup;
+  assignTaskForm: FormGroup;
   proyectoData: any;
   proyect = {
     title: '',
@@ -26,15 +27,17 @@ export class HomeComponent {
   selectedProjectTasks: any[] = [];
   isProjectModalOpen = false;
   isTaskModalOpen = false;
+  isAssignTaskModalOpen = false;
   showTaskForm: boolean = false;
-  
+
+  selectedUser: any = null;
+  isConfirmModalOpen = false;
   constructor(
     private userService: UserdataService,
     private taskService: CreateTasksService,
     private proyectService: CreateProyectService,
     private formBuilder: FormBuilder,
   ) {
-
     // Inicializar el formulario de creación de tareas
     this.taskForm = this.formBuilder.group({
       titulo: ['', Validators.required],
@@ -43,124 +46,178 @@ export class HomeComponent {
       proyecto: [null]
     });
 
-
-
     // Inicializar el formulario de creación de proyectos
     this.projectForm = this.formBuilder.group({
       title: ['', [Validators.required]],
-      // owner: ['', [Validators.required]], esto esta para futuras mejoras 
-      // members: ['',[Validators.required]]  
-    })
+    });
+
+    // Inicializar el formulario para asignar tareas
+    this.assignTaskForm = this.formBuilder.group({
+      tarea: ['', Validators.required],
+      miembro: ['', Validators.required]
+    });
   }
 
-
-  // validación de usuario logeado y validaciones
   ngOnInit(): void {
     if (this.userService.isLoggedIn()) {
       this.userService.getUserData().subscribe(data => {
         this.userData = data;
         this.get_task();
-        console.log('Datos del usuario:', this.userData.proyectos);  // se verifica que exitan los datos
-
       });
     } else {
       console.log('No hay un usuario autenticado');
     }
   }
+  // modal configs
+  // Método para seleccionar/deseleccionar un usuario
 
+  toggleSelectUser(user: any): void {
+    this.selectedProject.members.forEach((miembro: any) => miembro.selected = false); // Desmarcar todos
+    user.selected = true; // Marcar el usuario seleccionado
+    this.selectedUser = user;
+  
+    // Asignar el miembro seleccionado al formulario
+    this.assignTaskForm.patchValue({
+      miembro: user.id  // Asegurarse de usar el id o la propiedad adecuada del usuario
+    });
+  }
+  
 
+    closeConfirmModal(): void {
+    this.isConfirmModalOpen = false;
+  }
 
+// 
+  openProjectModal(): void {
+    this.isProjectModalOpen = true;
+  }
 
+  closeProjectModal(): void {
+    this.isProjectModalOpen = false;
+  }
 
-openProjectModal(): void {
-  this.isProjectModalOpen = true;
-}
+  openTaskModal(): void {
+    this.isTaskModalOpen = true;
+  }
 
-closeProjectModal(): void {
-  this.isProjectModalOpen = false;
-}
+  closeTaskModal(): void {
+    this.isTaskModalOpen = false;
+  }
 
-// Método para abrir y cerrar el modal de tareas
-openTaskModal(): void {
-  this.isTaskModalOpen = true;
-}
+  openAssignTaskModal(): void {
+    this.isAssignTaskModalOpen = true;
+  }
 
-closeTaskModal(): void {
-  this.isTaskModalOpen = false;
-}
-    
-  // Método para seleccionar un proyecto
+  closeAssignTaskModal(): void {
+    this.isAssignTaskModalOpen = false;
+  }
+  // ya no envia el error pero no se ven los integrantes del proyecto.
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
     this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
-    console.log('Tareas filtradas del proyecto seleccionado:', this.selectedProjectTasks);
-  }
-   // Metodo crear proyecto
-  crearProyecto(): void {
-    const token = localStorage.getItem('token');
- 
-    // Asegúrate de que los valores de title y userData.id existan antes de asignarlos
-    if (this.projectForm.value.title) {
-      this.proyect.title = this.projectForm.value.title;
-      this.proyect.owner = this.userData.username; // Usa el ID del usuario autenticado
-
   
-      console.log(this.proyect);  // Revisa que los valores se estén asignando correctamente
-    
-      if (token) {
-        this.proyectService.createProyect(this.proyect, token).subscribe(response => {
-          console.log('Proyecto creado:', response);
-          alert('se ha creado el proyecto')
-        }, error => {
-          console.error('Error al crear el proyecto:', error);
-        });
-      } else {
-        console.error('No se encontró un token');
-      }
-    } else {
-      console.error('No se encontraron datos válidos para el proyecto.');
+    const token = localStorage.getItem('token');
+    console.log(proyecto.members); // Verifica la estructura completa de los miembros
+  
+    // Ahora que el ID está incluido, se puede acceder directamente
+    const memberIds = proyecto.members.map((member: any) => member.id); 
+    console.log(memberIds); // Verifica los IDs extraídos
+  
+    if (token && memberIds.length > 0) {
+      this.taskService.getMembersDetails(memberIds, token).subscribe(response => {
+        // Actualizamos los miembros con la información recibida del backend
+        this.selectedProject.members = response;
+      });
     }
   }
-    // Método para crear una tarea
-    createTask(): void {
-      const token = localStorage.getItem('token');
-    
-      let taskData = {
-          titulo: this.taskForm.value.titulo,
-          descripcion: this.taskForm.value.descripcion,
-          carga: this.taskForm.value.carga,
-          proyecto: this.selectedProject.id
-      };
-    
-      console.log('Datos que se enviarán:', taskData);
-    
+  
+  
+  
+  
+
+  crearProyecto(): void {
+    const token = localStorage.getItem('token');
+    if (this.projectForm.value.title) {
+      this.proyect.title = this.projectForm.value.title;
+      this.proyect.owner = this.userData.username;
+  
       if (token) {
-          this.taskService.createTask(taskData, token).subscribe(response => {
-              console.log('Tarea creada:', response);
-              this.get_task(); // Volver a cargar las tareas
-          }, error => {
-              console.error('Error al crear la tarea:', error);
-          });
-      } else {
-          console.error('No se encontró un token');
+        this.proyectService.createProyect(this.proyect, token).subscribe(response => {
+          alert('se ha creado el proyecto');
+        });
       }
+    }
+  }
+// agregar mensaje de se ha creado tarea y cerrar modal
+  createTask(): void {
+    const token = localStorage.getItem('token');
+    let taskData = {
+      titulo: this.taskForm.value.titulo,
+      descripcion: this.taskForm.value.descripcion,
+      carga: this.taskForm.value.carga,
+      proyecto: this.selectedProject.id
+    };
+    
+    if (token) {
+      this.taskService.createTask(taskData, token).subscribe(() => {
+        this.get_task(); 
+      });
+    }
   }
 
   get_task(): void {
     const token = localStorage.getItem('token');
-  
     if (token) {
       this.taskService.gettask(token).subscribe(response => {
-        console.log('Tareas obtenidas:', response);  // Aquí recibes la lista de tareas
-        // Asigna las tareas obtenidas a una variable si necesitas mostrarlas
         this.userData.tareas = response.tareas;
-      }, error => {
-        console.error('Error al obtener las tareas:', error);
+        console.log('Tareas obtenidas:', this.userData.tareas); // Verifica que el id está presente
       });
-    } else {
-      console.error('No se encontró un token');
     }
   }
+  // Por ejemplo, si estás seleccionando una tarea de alguna manera:
+  selectTask(tarea: any): void {
+  // Asignar el ID de la tarea seleccionada al formulario
+  this.assignTaskForm.patchValue({
+    tarea: tarea.id  // Asegúrate de que estás usando el id
+  });
+  console.log('Tarea seleccionada:', tarea); // Verifica que el id está presente
+}
+
   
   
+
+
+assignTask(): void {
+  const token = localStorage.getItem('token');
+  
+  // Asegúrate de que los campos tienen valores correctos antes de enviar la solicitud
+  console.log('Datos del formulario antes de enviar:', this.assignTaskForm.value);
+  if (this.assignTaskForm.valid) {
+    const assignData = {
+      tarea: this.assignTaskForm.value.tarea,  // Debería ser el id de la tarea, no el título
+      miembro: this.assignTaskForm.value.miembro
+    };
+  
+    if (token) {
+      this.taskService.asignarTask(assignData, token).subscribe(response => {
+        console.log('Tarea asignada:', response);
+        this.closeAssignTaskModal();
+        this.get_task();
+      });
+    }
+  } else {
+    console.log('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.');
+  }
+}
+
+  
+
+   // Método para confirmar la asignación de tareas
+   confirmAssign(): void {
+    if (this.selectedUser) {
+      this.isConfirmModalOpen = true;
+    } else {
+      alert('Seleccione un usuario para asignar la tarea.');
+    }
+  }
 }

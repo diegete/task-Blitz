@@ -146,3 +146,17 @@ button:hover {
     width: 100%;
   }
 }
+
+.rectangulo-derecha {
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 300px;
+}
+
+li.selected {
+  background-color: #28a745;
+  color: white;
+}
