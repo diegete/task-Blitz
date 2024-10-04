@@ -144,6 +144,7 @@ export class HomeComponent {
       if (token) {
         this.proyectService.createProyect(this.proyect, token).subscribe(response => {
           alert('se ha creado el proyecto');
+          this.closeProjectModal();
         });
       }
     }
@@ -161,6 +162,8 @@ export class HomeComponent {
     if (token) {
       this.taskService.createTask(taskData, token).subscribe(() => {
         this.get_task(); 
+        this.closeTaskModal();
+        alert('se ha creado la tarea con exito')
       });
     }
   }
@@ -203,6 +206,8 @@ assignTask(): void {
         console.log('Tarea asignada:', response);
         this.closeAssignTaskModal();
         this.get_task();
+        this.closeConfirmModal()
+        alert('se ha asignado la tarea')
       });
     }
   } else {

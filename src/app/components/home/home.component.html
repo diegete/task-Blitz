@@ -1,27 +1,35 @@
 <div class="container">
   <!-- Primer rectángulo: Proyectos -->
-  <div class="rectangulo-izquierda">
-    <h2>Bienvenido: {{userData.username}}</h2>
-    
-    <h3>Proyectos:</h3>
-    <ul>
-      <li *ngFor="let proyecto of userData.proyectos" (click)="selectProject(proyecto)">
-        {{ proyecto.title }}
-      </li>
-    </ul>
-    <button (click)="openProjectModal()">Crear Proyecto</button>
-  </div>
+   @if (userData && userData.profile.user_type =='jefe') {
+    <div class="rectangulo-izquierda">
+      <h2>Bienvenido: {{userData.username}}</h2>
+      
+      <h3>Proyectos:</h3>
+      <ul>
+        <li *ngFor="let proyecto of userData.proyectos" (click)="selectProject(proyecto)">
+          {{ proyecto.title }}
+        </li>
+      </ul>
+      <button (click)="openProjectModal()">Crear Proyecto</button>
+    </div>
+   }@else {
+    <h2>No ha iniciado sesión o no es usuario jefe</h2>
+   }
+ 
 
   <!-- Segundo rectángulo: Tareas del proyecto seleccionado -->
-<div class="rectangulo-centro">
-  <h3>Tareas del Proyecto: {{ selectedProject?.title }}</h3>
-  <ul>
-    <li *ngFor="let tarea of selectedProjectTasks" (click)="selectTask(tarea)">
-      {{ tarea.titulo }}
-    </li>
-  </ul>    
-  <button (click)="openTaskModal()">Crear Tarea</button>
-</div>
+  @if (userData && userData.profile.user_type =='jefe') {
+    <div class="rectangulo-centro">
+      <h3>Tareas del Proyecto: {{ selectedProject?.title }}</h3>
+      <ul>
+        <li *ngFor="let tarea of selectedProjectTasks" (click)="selectTask(tarea)">
+          {{ tarea.titulo }}
+        </li>
+      </ul>    
+      <button (click)="openTaskModal()">Crear Tarea</button>
+    </div>
+  }
+
 
 
 <!-- Modal para crear proyecto -->
