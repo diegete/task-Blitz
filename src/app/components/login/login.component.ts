@@ -4,6 +4,7 @@ import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { UserRegisterService } from '../../services/user-register.service';
 import { CommonModule } from '@angular/common';
+import { UserdataService } from '../../services/userdata.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
   modalForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,private authService:LoginService,private router:Router
-    , private usuarioService:UserRegisterService) {
+    , private usuarioService:UserRegisterService, private userService: UserdataService) {
       // formulario login
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -45,17 +46,37 @@ export class LoginComponent {
   }
    
 
-  login(){
+  login() {
+    if (this.loginForm.invalid) {
+      return; // No permite continuar si el formulario no es válido
+    }
+  
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       (response) => {
-        console.log('Inicio de sesión extitoso',response);
-        this.authService.setToken(response.access);//guardamos el token 
-
-        console.log('Token guardado:', this.authService.getToken());// revisamos si se guardo con exito 
-        this.router.navigate(['/home'])
+        console.log('Inicio de sesión exitoso', response);
+        this.authService.setToken(response.access); // Guardar el token
+        console.log('Token guardado:', this.authService.getToken());
+  
+        // Obtener los datos del usuario
+        this.userService.getUserData().subscribe(data => {
+          this.userData = data;
+  
+          // Redirigir según el tipo de usuario
+          if (this.userData.profile.user_type === 'jefe') {
+            this.router.navigate(['/home']);
+          } else if (this.userData.profile.user_type === 'empleado') {
+            this.router.navigate(['/user-view']);
+          }
+        });
+      },
+      (error) => {
+        console.error('Error en el inicio de sesión:', error);
+        // Mostrar notificación de error en las credenciales
+        alert('Usuario o contraseña incorrectos');
       }
-    )
+    );
   }
+  
    
   createUser() {
     this.userData.username = this.modalForm.value.username;
