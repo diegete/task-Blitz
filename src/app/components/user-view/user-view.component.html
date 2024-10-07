@@ -1,1 +1,43 @@
-<p>user-view works!</p>
+<div class="container">
+    <!-- Rectángulo de proyectos -->
+    <div class="rectangulo-izquierda">
+      <h2>Bienvenido: {{ userData?.username }}</h2>
+      
+      <h3>Proyectos:</h3>
+      <ul>
+        <li *ngFor="let proyecto of userData?.proyectos" 
+            [class.selected]="proyecto === selectedProject" 
+            (click)="selectProject(proyecto)">
+          {{ proyecto.title }}
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Rectángulo de tareas -->
+    <div class="rectangulo-derecha">
+        <h3>Tareas del proyecto seleccionado:</h3>
+        <ul *ngIf="selectedProjectTasks.length > 0; else noTareas">
+          <li *ngFor="let tarea of selectedProjectTasks" (click)="showTaskDetail(tarea)">
+            {{ tarea.tarea.titulo }} <!-- Mostrar el título de la tarea -->
+          </li>
+        </ul>
+        <ng-template #noTareas>
+          <p>No hay tareas asignadas para este proyecto o no ha seleccionado ningun proyecto.</p>
+        </ng-template>
+      </div>
+  
+
+    <!-- Modal para los detalles de la tarea -->
+<div class="modal" [class.open]="isModalOpen">
+    <div class="modal-content">
+      <h2>Detalles de la Tarea</h2>
+      <p><strong>Título:</strong> {{ selectedTask?.tarea.titulo }}</p>
+      <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
+      <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
+      <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
+      <button type="button" (click)="closeModal()">Cerrar</button>
+    </div>
+  </div>
+  
+  </div>
+  

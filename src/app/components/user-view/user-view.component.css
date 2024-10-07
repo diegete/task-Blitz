@@ -1,0 +1,196 @@
+/* Estilos generales del contenedor */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  h2, h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #e9ecef;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  li:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-3px);
+  }
+  
+  /* Rectángulos */
+  .rectangulo-izquierda,
+  .rectangulo-centro,
+  .rectangulo-derecha {
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .rectangulo-izquierda h2,
+  .rectangulo-centro h3,
+  .rectangulo-derecha h3 {
+    font-size: 1.5em;
+    color: #495057;
+  }
+  
+  /* Botón */
+  button {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+  
+  /* Estilos del modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .modal.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+  }
+  
+  .modal-content.open {
+    transform: scale(1);
+  }
+  
+  .modal-content h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+  }
+  
+  .modal-content p {
+    margin-bottom: 10px;
+    color: #495057;
+  }
+  
+  /* Botones del modal */
+  .modal-content button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+  }
+  
+  .modal-content button:hover {
+    background-color: #c82333;
+  }
+  
+  /* Responsividad */
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .rectangulo-izquierda,
+    .rectangulo-centro,
+    .rectangulo-derecha {
+      width: 100%;
+    }
+  
+    ul {
+      padding: 0;
+    }
+  
+    li {
+      font-size: 1.1em;
+    }
+  
+    /* Hacer que el modal ocupe más espacio en pantallas pequeñas */
+    .modal-content {
+      width: 95%;
+      max-width: none;
+      padding: 15px;
+    }
+  
+    .modal-content h2 {
+      font-size: 1.3em;
+    }
+  }
+  
+  /* Colores y efectos para el modal */
+  .modal-content {
+    background-color: #f8f9fa; /* Fondo del modal */
+    border: 1px solid #dee2e6;
+  }
+  
+  .modal-content h2 {
+    color: #495057;
+  }
+  
+  .modal-content p {
+    color: #343a40;
+  }
+  
+  /* Botones del modal */
+  .modal-content button {
+    background-color: #007bff;
+  }
+  
+  .modal-content button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -111,7 +111,7 @@ export class HomeComponent {
   closeAssignTaskModal(): void {
     this.isAssignTaskModalOpen = false;
   }
-  // ya no envia el error pero no se ven los integrantes del proyecto.
+  // fixed ahora funciona como deberia 
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
     this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
