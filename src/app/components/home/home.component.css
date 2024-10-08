@@ -80,35 +80,45 @@ button:focus {
 
 /* Modal styles */
 .modal {
+  display: block;
   position: fixed;
-  top: 0;
+  z-index: 1;
   left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #fefefe;
+  margin: 15% auto;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  width: 90%; /* Hacer más flexible para pantallas pequeñas */
-  max-width: 400px;
-  transform: scale(0.8);
-  transition: transform 0.3s ease;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal.open {
   opacity: 1;
   visibility: visible;
+}
+.modal.ng-trigger.ng-trigger-fadeIn {
+  display: flex; /* Mostrar el modal */
 }
 
 .modal-content.open {
@@ -184,4 +194,11 @@ li.selected {
   background-color: #28a745;
   color: white;
   transform: scale(1.05);
+}
+
+/* Clase para tareas asignadas */
+.asignada {
+  color: grey;
+  cursor: not-allowed;
+  text-decoration: line-through; /* Opcional: añadir línea tachada */
 }

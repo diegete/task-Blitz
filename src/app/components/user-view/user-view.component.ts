@@ -12,9 +12,9 @@ import { CreateTasksService } from '../../services/create-tasks.service';
   styleUrl: './user-view.component.css'
 })
 export class UserViewComponent {
-  userData: any = null; // Almacenará los datos del usuario autenticado
-  selectedProject: any = null; // Proyecto seleccionado
-  selectedProjectTasks: any[] = []; // Tareas del proyecto seleccionado
+  userData: any = null; 
+  selectedProject: any = null; 
+  selectedProjectTasks: any[] = []; 
   selectedTask: any = null;
   isTaskModalOpen = false;
   isModalOpen = false;

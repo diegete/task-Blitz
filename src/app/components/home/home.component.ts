@@ -87,8 +87,8 @@ export class HomeComponent {
     this.isConfirmModalOpen = false;
   }
 
-// 
   openProjectModal(): void {
+    console.log('abri')
     this.isProjectModalOpen = true;
   }
 
@@ -111,6 +111,7 @@ export class HomeComponent {
   closeAssignTaskModal(): void {
     this.isAssignTaskModalOpen = false;
   }
+
   // fixed ahora funciona como deberia 
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
@@ -150,23 +151,36 @@ export class HomeComponent {
     }
   }
 // agregar mensaje de se ha creado tarea y cerrar modal
-  createTask(): void {
-    const token = localStorage.getItem('token');
-    let taskData = {
-      titulo: this.taskForm.value.titulo,
-      descripcion: this.taskForm.value.descripcion,
-      carga: this.taskForm.value.carga,
-      proyecto: this.selectedProject.id
-    };
-    
-    if (token) {
-      this.taskService.createTask(taskData, token).subscribe(() => {
-        this.get_task(); 
-        this.closeTaskModal();
-        alert('se ha creado la tarea con exito')
-      });
-    }
+createTask(): void {
+  const token = localStorage.getItem('token');
+  let taskData = {
+    titulo: this.taskForm.value.titulo,
+    descripcion: this.taskForm.value.descripcion,
+    carga: this.taskForm.value.carga,
+    proyecto: this.selectedProject.id
+  };
+  
+  if (token) {
+    this.taskService.createTask(taskData, token).subscribe((response: any) => {
+      // Añadir la nueva tarea al array local de tareas
+      const nuevaTarea = {
+        id: response.id,  // Suponiendo que el backend devuelve el ID de la tarea creada
+        titulo: taskData.titulo,
+        descripcion: taskData.descripcion,
+        carga: taskData.carga,
+        proyecto: taskData.proyecto,
+        asignada: false  // O cualquier valor inicial para 'asignada'
+      };
+      
+      // Actualizar la lista de tareas del proyecto seleccionado
+      this.selectedProjectTasks.push(nuevaTarea);
+
+      this.closeTaskModal();
+      alert('Se ha creado la tarea con éxito');
+    });
   }
+}
+
 
   get_task(): void {
     const token = localStorage.getItem('token');
@@ -177,11 +191,11 @@ export class HomeComponent {
       });
     }
   }
-  // Por ejemplo, si estás seleccionando una tarea de alguna manera:
+  
   selectTask(tarea: any): void {
   // Asignar el ID de la tarea seleccionada al formulario
   this.assignTaskForm.patchValue({
-    tarea: tarea.id  // Asegúrate de que estás usando el id
+    tarea: tarea.id  
   });
   console.log('Tarea seleccionada:', tarea); // Verifica que el id está presente
 }
@@ -192,28 +206,34 @@ export class HomeComponent {
 
 assignTask(): void {
   const token = localStorage.getItem('token');
-  
-  // Asegúrate de que los campos tienen valores correctos antes de enviar la solicitud
+
   console.log('Datos del formulario antes de enviar:', this.assignTaskForm.value);
   if (this.assignTaskForm.valid) {
     const assignData = {
-      tarea: this.assignTaskForm.value.tarea,  // Debería ser el id de la tarea, no el título
+      tarea: this.assignTaskForm.value.tarea,  // Debería ser el id de la tarea
       miembro: this.assignTaskForm.value.miembro
     };
-  
+
     if (token) {
       this.taskService.asignarTask(assignData, token).subscribe(response => {
         console.log('Tarea asignada:', response);
+
+        // Encuentra la tarea asignada en el array y márcala como tachada
+        const tareaIndex = this.selectedProjectTasks.findIndex(t => t.id === assignData.tarea);
+        if (tareaIndex !== -1) {
+          this.selectedProjectTasks[tareaIndex].asignada = true; // Suponiendo que 'asignada' es la propiedad que indica que la tarea está completada/asignada
+        }
+
         this.closeAssignTaskModal();
-        this.get_task();
-        this.closeConfirmModal()
-        alert('se ha asignado la tarea')
+        this.closeConfirmModal();
+        alert('se ha asignado la tarea');
       });
     }
   } else {
     console.log('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.');
   }
 }
+
 
   
 

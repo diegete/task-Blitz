@@ -1,8 +1,9 @@
+
 <div class="container">
   <!-- Primer rectángulo: Proyectos -->
    @if (userData && userData.profile.user_type =='jefe') {
     <div class="rectangulo-izquierda">
-      <h2>Bienvenido: {{userData.username}}</h2>
+      <h2 >Bienvenido: {{userData.username}}</h2>
       
       <h3>Proyectos:</h3>
       <ul>
@@ -22,8 +23,10 @@
     <div class="rectangulo-centro">
       <h3>Tareas del Proyecto: {{ selectedProject?.title }}</h3>
       <ul>
-        <li *ngFor="let tarea of selectedProjectTasks" (click)="selectTask(tarea)">
-          {{ tarea.titulo }}
+        <li *ngFor="let tarea of selectedProjectTasks" 
+            (click)="!tarea.asignada && selectTask(tarea)"
+            [class.asignada]="tarea.asignada">  <!-- Aplica la clase 'asignada' si la tarea ya está asignada -->
+          {{ tarea.titulo }} 
         </li>
       </ul>    
       <button (click)="openTaskModal()">Crear Tarea</button>
