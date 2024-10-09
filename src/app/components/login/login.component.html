@@ -2,14 +2,16 @@
   
 
 <div class="container">
+    
   <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <h3 class="tituloLogin" >Bienvenido</h3>
     <div>
-      <label for="username">Username</label>
+      <label for="username">Usuario</label>
       <input id="username" formControlName="username" type="text" />
     </div>
 
     <div>
-      <label for="password">Password</label>
+      <label for="password">Contraseña</label>
       <input id="password" formControlName="password" type="password" />
     </div>
 

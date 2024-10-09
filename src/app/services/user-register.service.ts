@@ -11,10 +11,10 @@ export class UserRegisterService {
 
   constructor(private http:HttpClient) {}
  
-  createUser(userData: any): Observable<any> {
+  createUser(proyectoData: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post(this.apiUrl, userData, { headers });
+    return this.http.post(this.apiUrl, proyectoData, { headers });
   }
 }

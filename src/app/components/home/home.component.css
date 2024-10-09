@@ -1,0 +1,204 @@
+/* General container styles */
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Permitir que los elementos se reorganicen en pantallas pequeñas */
+  gap: 20px;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+h2, h3 {
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 600; /* Mejorar la visibilidad de los títulos */
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: #e9ecef;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+li:hover {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-3px); /* Añadir un pequeño efecto de elevación */
+}
+
+/* Rectángulos */
+.rectangulo-izquierda,
+.rectangulo-centro,
+.rectangulo-derecha {
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  flex: 1; /* Permitir que todos los rectángulos ocupen el mismo espacio disponible */
+  min-width: 250px;
+}
+
+.rectangulo-izquierda h2,
+.rectangulo-centro h3,
+.rectangulo-derecha h3 {
+  font-size: 1.5em;
+  color: #495057;
+}
+
+button {
+  display: block;
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #218838;
+  transform: translateY(-2px); /* Añadir un pequeño efecto de elevación */
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px 2px rgba(40, 167, 69, 0.5);
+}
+
+/* Modal styles */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+.modal.ng-trigger.ng-trigger-fadeIn {
+  display: flex; /* Mostrar el modal */
+}
+
+.modal-content.open {
+  transform: scale(1);
+}
+
+.modal-content h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content input,
+.modal-content textarea {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-size: 1em;
+}
+
+.modal-content textarea {
+  resize: vertical;
+}
+
+.modal-content button[type="submit"] {
+  background-color: #007bff;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button[type="button"] {
+  background-color: #dc3545;
+  margin-top: 10px;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #c82333;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rectangulo-izquierda,
+  .rectangulo-centro,
+  .rectangulo-derecha {
+    width: 100%;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  li {
+    font-size: 1.1em;
+  }
+}
+
+/* Selected user styles */
+li.selected {
+  background-color: #28a745;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Clase para tareas asignadas */
+.asignada {
+  color: grey;
+  cursor: not-allowed;
+  text-decoration: line-through; /* Opcional: añadir línea tachada */
+}
