@@ -202,3 +202,23 @@ li.selected {
   cursor: not-allowed;
   text-decoration: line-through; /* Opcional: añadir línea tachada */
 }
+
+li.tarea-seleccionada {
+  background-color: #007bff; /* Color distinto para las tareas seleccionadas */
+  color: white;
+  transform: scale(1.05); /* Resaltar un poco más */
+}
+.modal-content select {
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  font-size: 1em;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.modal-content select:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px 2px rgba(0, 123, 255, 0.5); /* Resaltar al estar enfocado */
+}

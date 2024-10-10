@@ -13,6 +13,7 @@ import { CreateProyectService } from '../../services/create-proyect.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  // inicio  variables
   userData: any;
   taskForm: FormGroup;
   projectForm: FormGroup;
@@ -32,6 +33,13 @@ export class HomeComponent {
 
   selectedUser: any = null;
   isConfirmModalOpen = false;
+
+  invitationForm: FormGroup;
+  availableEmployees: any[] = [];
+  isInvitationModalOpen = false;
+
+
+  // fin varialbes 
   constructor(
     private userService: UserdataService,
     private taskService: CreateTasksService,
@@ -42,9 +50,9 @@ export class HomeComponent {
     this.taskForm = this.formBuilder.group({
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
-      carga: [null, Validators.required],
+      carga: [null, Validators.required],  // Valor numérico (5, 3, 1)
       proyecto: [null]
-    });
+    });    
 
     // Inicializar el formulario de creación de proyectos
     this.projectForm = this.formBuilder.group({
@@ -55,6 +63,10 @@ export class HomeComponent {
     this.assignTaskForm = this.formBuilder.group({
       tarea: ['', Validators.required],
       miembro: ['', Validators.required]
+    });
+    // Inicializar el formulario invitaciones
+    this.invitationForm = this.formBuilder.group({
+      invited_user: ['', Validators.required]
     });
   }
 
@@ -116,22 +128,25 @@ export class HomeComponent {
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
     this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
-  
+
+    // Restablecer la tarea seleccionada al cambiar de proyecto
+    this.assignTaskForm.reset();  // Restablece el formulario de asignación de tareas
+    this.selectedUser = null;  // Desmarca cualquier usuario seleccionado
+
     const token = localStorage.getItem('token');
     console.log(proyecto.members); // Verifica la estructura completa de los miembros
-  
+
     // Ahora que el ID está incluido, se puede acceder directamente
     const memberIds = proyecto.members.map((member: any) => member.id); 
     console.log(memberIds); // Verifica los IDs extraídos
-  
+
     if (token && memberIds.length > 0) {
       this.taskService.getMembersDetails(memberIds, token).subscribe(response => {
         // Actualizamos los miembros con la información recibida del backend
         this.selectedProject.members = response;
       });
     }
-  }
-  
+}
   
   
   
@@ -156,7 +171,7 @@ createTask(): void {
   let taskData = {
     titulo: this.taskForm.value.titulo,
     descripcion: this.taskForm.value.descripcion,
-    carga: this.taskForm.value.carga,
+    carga: this.taskForm.value.carga,  // El valor numérico 5, 3 o 1
     proyecto: this.selectedProject.id
   };
   
@@ -164,12 +179,12 @@ createTask(): void {
     this.taskService.createTask(taskData, token).subscribe((response: any) => {
       // Añadir la nueva tarea al array local de tareas
       const nuevaTarea = {
-        id: response.id,  // Suponiendo que el backend devuelve el ID de la tarea creada
+        id: response.id,
         titulo: taskData.titulo,
         descripcion: taskData.descripcion,
         carga: taskData.carga,
         proyecto: taskData.proyecto,
-        asignada: false  // O cualquier valor inicial para 'asignada'
+        asignada: false
       };
       
       // Actualizar la lista de tareas del proyecto seleccionado
@@ -180,6 +195,7 @@ createTask(): void {
     });
   }
 }
+
 
 
   get_task(): void {
@@ -202,7 +218,7 @@ createTask(): void {
 
   
   
-
+// cambiar numero por alto medio bajo, 1,3,5 y tema invitaciones
 
 assignTask(): void {
   const token = localStorage.getItem('token');
@@ -230,7 +246,7 @@ assignTask(): void {
       });
     }
   } else {
-    console.log('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.');
+    alert('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.')
   }
 }
 
@@ -245,4 +261,54 @@ assignTask(): void {
       alert('Seleccione un usuario para asignar la tarea.');
     }
   }
+  
+  
+  // invitaciones 
+  getAvailableEmployees(): void {
+    const token = localStorage.getItem('token');
+    if (token && this.selectedProject) {
+      this.taskService.getAvailableEmployees(this.selectedProject.id, token).subscribe(
+        (response) => {
+          
+          this.availableEmployees = response; // Asignar la lista de empleados disponibles
+          console.log(this.availableEmployees)
+        },
+        (error) => {
+          console.error('Error al obtener empleados disponibles:', error);
+        }
+      );
+    }
+  }
+
+
+  openInvitationModal(): void {
+    this.isInvitationModalOpen = true;
+    this.getAvailableEmployees(); // Obtener empleados disponibles al abrir el modal
+  }
+
+  closeInvitationModal(): void {
+    this.isInvitationModalOpen = false;
+  }
+  // arreglar
+  sendInvitation(): void {
+    const token = localStorage.getItem('token');
+    const invitationData = {
+      proyecto: this.selectedProject.id,
+      invited_user: this.invitationForm.value.invited_user
+    };
+
+    if (token) {
+      this.taskService.sendInvitation(invitationData, token).subscribe(
+        (response) => {
+          alert('Invitación enviada con éxito');
+          this.closeInvitationModal();
+        },
+        (error) => {
+          console.error('Error al enviar la invitación:', error);
+          alert('Hubo un error al enviar la invitación');
+        }
+      );
+    }
+  }
+
 }

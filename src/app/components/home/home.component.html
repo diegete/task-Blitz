@@ -49,6 +49,7 @@
 </div>
 
 <!-- Modal para crear tarea -->
+
 <div *ngIf="isTaskModalOpen" class="modal">
   <div class="modal-content">
     <h2>Crear Tarea</h2>
@@ -60,13 +61,18 @@
       <textarea formControlName="descripcion" id="descripcion"></textarea>
       
       <label for="carga">Carga de trabajo:</label>
-      <input formControlName="carga" id="carga" type="number">
+      <select formControlName="carga" id="carga">
+        <option value="5">Alto</option>
+        <option value="3">Medio</option>
+        <option value="1">Bajo</option>
+      </select>
       
       <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
       <button type="button" (click)="closeTaskModal()">Cerrar</button>
     </form>
   </div>
 </div>
+
 
 <!-- Tercer rectángulo: Asignar tareas a un usuario del proyecto -->
 <div class="rectangulo-derecha" *ngIf="selectedProject">
@@ -88,3 +94,29 @@
     <button (click)="closeConfirmModal()">Cancelar</button>
   </div>
 </div>
+
+<!-- Código existente ... -->
+
+<!-- Botón para abrir el modal de invitación -->
+<div *ngIf="selectedProject">
+  <button (click)="openInvitationModal()">Invitar Miembros</button>
+</div>
+
+<!-- Modal para enviar invitaciones -->
+<div *ngIf="isInvitationModalOpen" class="modal">
+  <div class="modal-content">
+    <h2>Invitar Miembro al Proyecto: {{ selectedProject.title }}</h2>
+    <form [formGroup]="invitationForm" (ngSubmit)="sendInvitation()">
+      <label for="invited_user">Selecciona un empleado:</label>
+      <select formControlName="invited_user" id="invited_user">
+        <option *ngFor="let user of availableEmployees" [value]="user.id">{{ user.username }}</option>
+      </select>
+      <button type="submit" [disabled]="invitationForm.invalid">Enviar Invitación</button>
+      <button type="button" (click)="closeInvitationModal()">Cerrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Código existente ... -->
+
+
