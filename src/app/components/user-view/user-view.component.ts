@@ -3,6 +3,7 @@ import { UserdataService } from '../../services/userdata.service';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { CreateTasksService } from '../../services/create-tasks.service';
+import { Invitation } from '../../models/Invitation.model';
 
 @Component({
   selector: 'app-user-view',
@@ -18,9 +19,11 @@ export class UserViewComponent {
   selectedTask: any = null;
   isTaskModalOpen = false;
   isModalOpen = false;
-  
-  pendingInvitations: any[] = []; // o una interfaz específica si la tienes
+  pendingInvitations: Invitation[] = [];
+  token: string | null = null;  // Variable para almacenar el token
   isInvitationModalOpen = false; // Controla la apertura del modal de invitaciones
+  pendingInvitationCount = 0;
+  showInvitations: boolean = false;
 
   constructor(
     private userService: UserdataService, 
@@ -32,33 +35,31 @@ export class UserViewComponent {
       if (this.userService.isLoggedIn()) {
         this.userService.getUserData().subscribe(data => {
           this.userData = data;
-    
+          this.loadPendingInvitations(); 
           // Cargar las invitaciones pendientes
-          // this.loadPendingInvitations(); // Llama a la función que carga las invitaciones
         });
       } else {
         console.log('No hay un usuario autenticado');
       }
     }
     
-
-  // // Cargar invitaciones pendientes
-  // loadPendingInvitations(): void {
-  //   const token = this.loginService.getToken(); 
-  
-  //   if (token) {
-  //     this.createTask.getPendingInvitations(token).subscribe(
-  //       invitations => {
-  //         this.pendingInvitations = invitations;
-  //       },
-  //       error => {
-  //         console.error('Error al cargar invitaciones pendientes:', error);
-  //       }
-  //     );
-  //   } else {
-  //     console.error('No se pudo obtener el token. El usuario no está autenticado.');
-  //   }
-  // }
+    loadPendingInvitations(): void {
+      this.token = this.loginService.getToken();
+      if (this.token) {
+        this.createTask.getPendingInvitations(this.token).subscribe(
+          invitations => {
+            this.pendingInvitations = invitations;
+            this.pendingInvitationCount = invitations.length; // Actualizar el contador de invitaciones
+          },
+          error => {
+            console.error('Error al cargar invitaciones pendientes:', error);
+          }
+        );
+        
+      } else {
+        console.error('No se pudo obtener el token. El usuario no está autenticado.');
+      }
+    }
 
   selectProject(proyecto: any): void {
     const token = this.loginService.getToken();
@@ -76,26 +77,46 @@ export class UserViewComponent {
       console.error('Token no disponible. El usuario no está autenticado.');
     }
   }
+  acceptInvitation(invitationId: number): void {
+    if (this.token) {
+      this.createTask.manageInvitation(invitationId, 'accept', this.token).subscribe(
+        response => {
+          console.log('Invitación aceptada:', response);
+          this.removeInvitationFromList(invitationId);
+        },
+        error => {
+          console.error('Error al aceptar la invitación:', error);
+        }
+      );
+    }
+  }
 
-  // Manejar la acción de invitación
-  // handleInvitation(invitationId: number, action: string): void {
-  //   this.createTask.manageInvitation(invitationId, action).subscribe(
-  //     response => {
-  //       // Actualizar la lista de invitaciones tras la acción
-  //       this.loadPendingInvitations();
-  //     },
-  //     error => {
-  //       console.error('Error al manejar la invitación:', error);
-  //     }
-  //   );
-  // }
+  
+  rejectInvitation(invitationId: number): void {
+    if (this.token) {
+      this.createTask.manageInvitation(invitationId, 'reject', this.token).subscribe(
+        response => {
+          console.log('Invitación rechazada:', response);
+          this.removeInvitationFromList(invitationId);
+        },
+        error => {
+          console.error('Error al rechazar la invitación:', error);
+        }
+      );
+    }
+  }
 
-  // Abrir y cerrar modal de invitaciones
+  removeInvitationFromList(invitationId: number): void {
+    this.pendingInvitations = this.pendingInvitations.filter(invitation => invitation.id !== invitationId);
+    this.pendingInvitationCount = this.pendingInvitations.length; // Actualizar el contador de invitaciones
+  }
+
+  // Abrir y cerrar el modal de invitaciones
   openInvitationModal(): void {
     this.isInvitationModalOpen = true;
   }
 
-  closeInvitationModal(): void {
+  closeInvitationModal() {
     this.isInvitationModalOpen = false;
   }
 
@@ -110,13 +131,17 @@ export class UserViewComponent {
     this.selectedTask = null;
   }
 
-  showTaskDetail(tarea: any): void {
+  showTaskDetail(tarea: any) {
     this.selectedTask = tarea;
-    this.isModalOpen = true; 
+    this.isModalOpen = true;
   }
 
-  closeModal(): void {
-    this.isModalOpen = false;  
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  toggleInvitations() {
+    this.isInvitationModalOpen = !this.isInvitationModalOpen;
   }
 
 }

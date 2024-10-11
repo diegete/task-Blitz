@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Invitation } from '../models/Invitation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,18 +50,22 @@ export class CreateTasksService {
   });
 }
 
-manageInvitation(invitationId: number, action: string) {
-  return this.http.post(`${this.apiUrl7}/manage-invitation/${invitationId}/`, { action });
+manageInvitation(invitationId: number, action: string, token: string): Observable<any> {
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const body = new HttpParams().set('action', action);
+  return this.http.post<any>(`${this.apiUrl7}${invitationId}/`, body, { headers });
 }
+
 
 getAvailableEmployees(projectId: number, token: string): Observable<any> {
   const headers = { Authorization: `Bearer ${token}` };
   return this.http.get<any>(`${this.apiUrl8}${projectId}/`, { headers });
 }
 getPendingInvitations(token: string) {
-  return this.http.get(`${this.apiUrl9}/pending-invitations/`, {
+  return this.http.get<Invitation[]>(`${this.apiUrl9}/pending-invitations/`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 }
+
 
 }

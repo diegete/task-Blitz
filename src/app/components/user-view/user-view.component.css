@@ -193,4 +193,100 @@
   .modal-content button:hover {
     background-color: #0056b3;
   }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
   
+  .rectangulo-izquierda {
+    width: 45%;
+  }
+  
+  .rectangulo-derecha {
+    width: 45%;
+  }
+  
+  .invitation-button {
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
+    top: -5px;
+  }
+  
+/* Estilos del modal (ajustado para centrar y mejorar visualización) */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 500px;
+  height: auto; /* Ajustar altura automáticamente según el contenido */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 999;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Estilos del contenido del modal */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.modal-content p {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1em;
+  margin-top: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.modal-content button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+/* Botones para aceptar/rechazar */
+.modal-content button.accept {
+  background-color: #007bff;
+}
+
+.modal-content button.reject {
+  background-color: #dc3545;
+}
+
+.modal-content button.accept:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button.reject:hover {
+  background-color: #c82333;
+}
