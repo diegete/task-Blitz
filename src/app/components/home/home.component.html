@@ -66,6 +66,10 @@
         <option value="3">Medio</option>
         <option value="1">Bajo</option>
       </select>
+
+      <label for="fecha">fecha:</label>
+      <input formControlName="fecha" id="fecha" type="date">
+
       
       <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
       <button type="button" (click)="closeTaskModal()">Cerrar</button>

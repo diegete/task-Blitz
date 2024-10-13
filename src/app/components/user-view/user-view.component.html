@@ -40,6 +40,7 @@
       <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
       <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
       <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
+      <p><strong>Fecha entrega:</strong> {{selectedTask?.tarea.fechamax | date: 'short'}}</p>
       <button type="button" (click)="closeModal()">Cerrar</button>
     </div>
   </div>

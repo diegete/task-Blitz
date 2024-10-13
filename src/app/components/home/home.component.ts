@@ -51,7 +51,9 @@ export class HomeComponent {
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
       carga: [null, Validators.required],  // Valor numérico (5, 3, 1)
-      proyecto: [null]
+      proyecto: [null],
+      fecha: [Date, Validators.required]
+
     });    
 
     // Inicializar el formulario de creación de proyectos
@@ -172,7 +174,8 @@ createTask(): void {
     titulo: this.taskForm.value.titulo,
     descripcion: this.taskForm.value.descripcion,
     carga: this.taskForm.value.carga,  // El valor numérico 5, 3 o 1
-    proyecto: this.selectedProject.id
+    proyecto: this.selectedProject.id,
+    fechamax: this.taskForm.value.fecha
   };
   
   if (token) {
