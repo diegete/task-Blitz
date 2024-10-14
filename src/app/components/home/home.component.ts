@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserdataService } from '../../services/userdata.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateTasksService } from '../../services/create-tasks.service';
 import { CommonModule } from '@angular/common';
 import { CreateProyectService } from '../../services/create-proyect.service';
@@ -8,7 +8,7 @@ import { CreateProyectService } from '../../services/create-proyect.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule,FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -76,11 +76,13 @@ export class HomeComponent {
     if (this.userService.isLoggedIn()) {
       this.userService.getUserData().subscribe(data => {
         this.userData = data;
+        this.ordenarProyectosPorPrioridad()
         this.get_task();
       });
     } else {
       console.log('No hay un usuario autenticado');
     }
+    
   }
   // modal configs
   // Método para seleccionar/deseleccionar un usuario
@@ -313,5 +315,24 @@ assignTask(): void {
       );
     }
   }
+  actualizarPrioridad(proyecto: any) {
+    const token = localStorage.getItem('token');
+    if (token){
+      this.proyectService.actualizarPrioridad(proyecto.id, Number(proyecto.prioridad) ,token).subscribe(
+        () => {
+          alert('se ha cambiado la prioridad')
+          this.ordenarProyectosPorPrioridad()
+        },
+        error => {
+          console.error('Error al actualizar la prioridad', error);
+        }
+      );
+    }
+    
+  }
+  ordenarProyectosPorPrioridad() {
+    this.userData.proyectos.sort((a: any, b: any) => b.prioridad - a.prioridad);
+  }
 
+  
 }

@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Invitation } from '../models/Invitation.model';
+import { Invitation } from '../models/invitation.model';
+
+
 
 @Injectable({
   providedIn: 'root'

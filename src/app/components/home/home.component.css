@@ -1,4 +1,3 @@
-/* General container styles */
 .container {
   display: flex;
   flex-wrap: wrap; /* Permitir que los elementos se reorganicen en pantallas pequeñas */
@@ -70,7 +69,7 @@ button {
 
 button:hover {
   background-color: #218838;
-  transform: translateY(-2px); /* Añadir un pequeño efecto de elevación */
+  transform: translateY(-2px); 
 }
 
 button:focus {
@@ -88,7 +87,7 @@ button:focus {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -189,24 +188,24 @@ button:focus {
   }
 }
 
-/* Selected user styles */
+
 li.selected {
   background-color: #28a745;
   color: white;
   transform: scale(1.05);
 }
 
-/* Clase para tareas asignadas */
+
 .asignada {
   color: grey;
   cursor: not-allowed;
-  text-decoration: line-through; /* Opcional: añadir línea tachada */
+  text-decoration: line-through; 
 }
 
 li.tarea-seleccionada {
-  background-color: #007bff; /* Color distinto para las tareas seleccionadas */
+  background-color: #007bff; 
   color: white;
-  transform: scale(1.05); /* Resaltar un poco más */
+  transform: scale(1.05); 
 }
 .modal-content select {
   padding: 10px;
@@ -220,5 +219,5 @@ li.tarea-seleccionada {
 
 .modal-content select:focus {
   outline: none;
-  box-shadow: 0px 0px 5px 2px rgba(0, 123, 255, 0.5); /* Resaltar al estar enfocado */
+  box-shadow: 0px 0px 5px 2px rgba(0, 123, 255, 0.5); 
 }

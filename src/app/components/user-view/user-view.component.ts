@@ -3,7 +3,7 @@ import { UserdataService } from '../../services/userdata.service';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { CreateTasksService } from '../../services/create-tasks.service';
-import { Invitation } from '../../models/Invitation.model';
+
 
 @Component({
   selector: 'app-user-view',
@@ -19,7 +19,7 @@ export class UserViewComponent {
   selectedTask: any = null;
   isTaskModalOpen = false;
   isModalOpen = false;
-  pendingInvitations: Invitation[] = [];
+  pendingInvitations: any[] = [];
   token: string | null = null;  // Variable para almacenar el token
   isInvitationModalOpen = false; // Controla la apertura del modal de invitaciones
   pendingInvitationCount = 0;
