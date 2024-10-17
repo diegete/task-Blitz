@@ -83,8 +83,10 @@
           <option value="3">Medio</option>
           <option value="1">Bajo</option>
         </select>
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input formControlName="fechaInicio" id="fechaInicio" type="date">
 
-        <label for="fecha">Fecha:</label>
+        <label for="fecha">Fecha max:</label>
         <input formControlName="fecha" id="fecha" type="date">
 
         <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>

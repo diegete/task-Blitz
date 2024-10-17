@@ -13,6 +13,7 @@ import { CreateProyectService } from '../../services/create-proyect.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  // actualización de tareas, envio de avance por parte de los empleados, investigar auth 2 factores 
   // inicio  variables
   userData: any;
   taskForm: FormGroup;
@@ -52,6 +53,7 @@ export class HomeComponent {
       descripcion: ['', Validators.required],
       carga: [null, Validators.required],  // Valor numérico (5, 3, 1)
       proyecto: [null],
+      fechaIncio: [Date, Validators.required],
       fecha: [Date, Validators.required]
 
     });    
@@ -222,8 +224,6 @@ createTask(): void {
 }
 
   
-  
-// cambiar numero por alto medio bajo, 1,3,5 y tema invitaciones
 
 assignTask(): void {
   const token = localStorage.getItem('token');
