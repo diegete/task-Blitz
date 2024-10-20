@@ -20,6 +20,7 @@ export class CreateTasksService {
   private apiUrl7 = 'http://localhost:8000/manage-invitation/'
   private apiUrl8 = 'http://localhost:8000/available-employees/'
   private apiUrl9 = 'http://localhost:8000/'
+
   constructor(private http: HttpClient) {}
   // Método para crear una tarea
   createTask(taskData: any, token: string): Observable<any> {
@@ -69,5 +70,9 @@ getPendingInvitations(token: string) {
   });
 }
 
+updateTask(tarea: any, token: string): Observable<any> {
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.put(`${this.apiUrl9}update-tasks/${tarea.id}/`, tarea, { headers });
+}
 
 }

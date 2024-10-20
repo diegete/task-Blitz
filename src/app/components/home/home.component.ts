@@ -13,12 +13,14 @@ import { CreateProyectService } from '../../services/create-proyect.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  // actualización de tareas, envio de avance por parte de los empleados, investigar auth 2 factores 
+  // envio de avance por parte de los empleados, investigar auth 2 factores 
   // inicio  variables
   userData: any;
+  tareaup: any;
   taskForm: FormGroup;
   projectForm: FormGroup;
   assignTaskForm: FormGroup;
+  taskUpdateForm: FormGroup;
   proyectoData: any;
   proyect = {
     title: '',
@@ -30,8 +32,9 @@ export class HomeComponent {
   isProjectModalOpen = false;
   isTaskModalOpen = false;
   isAssignTaskModalOpen = false;
+  isTaskModalUpdateOpen = false;
   showTaskForm: boolean = false;
-
+  
   selectedUser: any = null;
   isConfirmModalOpen = false;
 
@@ -54,7 +57,7 @@ export class HomeComponent {
       carga: [null, Validators.required],  // Valor numérico (5, 3, 1)
       proyecto: [null],
       fechaIncio: [Date, Validators.required],
-      fecha: [Date, Validators.required]
+      fechaMax: [Date, Validators.required]
 
     });    
 
@@ -72,6 +75,17 @@ export class HomeComponent {
     this.invitationForm = this.formBuilder.group({
       invited_user: ['', Validators.required]
     });
+
+    this.taskUpdateForm = this.formBuilder.group({
+      id: ['',Validators.required],
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      carga: [null, Validators.required],
+      proyecto: [null],
+      fechaInicio: [Date, Validators.required],
+      fechaMax: [Date, Validators.required]
+    })
+
   }
 
   ngOnInit(): void {
@@ -130,6 +144,14 @@ export class HomeComponent {
     this.isAssignTaskModalOpen = false;
   }
 
+  // nuevo modal de actulizar tareas
+  openTaskEditModal(): void{
+    this.isTaskModalUpdateOpen = true
+  }
+  closeTaskEditModal(): void{
+    this.isTaskModalUpdateOpen = false
+  }
+
   // fixed ahora funciona como deberia 
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
@@ -179,7 +201,8 @@ createTask(): void {
     descripcion: this.taskForm.value.descripcion,
     carga: this.taskForm.value.carga,  // El valor numérico 5, 3 o 1
     proyecto: this.selectedProject.id,
-    fechamax: this.taskForm.value.fecha
+    fechaInicio: this.taskForm.value.fechaIncio,
+    fechamax: this.taskForm.value.fechaMax
   };
   
   if (token) {
@@ -220,6 +243,10 @@ createTask(): void {
   this.assignTaskForm.patchValue({
     tarea: tarea.id  
   });
+  this.taskUpdateForm.patchValue({
+    id: tarea.id  
+  });
+  this.tareaup = tarea
   console.log('Tarea seleccionada:', tarea); // Verifica que el id está presente
 }
 
@@ -334,5 +361,40 @@ assignTask(): void {
     this.userData.proyectos.sort((a: any, b: any) => b.prioridad - a.prioridad);
   }
 
+  updateTask() {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      alert('No se encontró el token. Por favor, inicia sesión.');
+      return;
+    }
+  
+    const tarea = {
+      id: this.taskUpdateForm.value.id,
+      titulo: this.taskUpdateForm.value.titulo,
+      descripcion: this.taskUpdateForm.value.descripcion,
+      carga: this.taskUpdateForm.value.carga,
+      proyecto: this.selectedProject.id,
+      fechaInicio: this.taskUpdateForm.value.fechaInicio,  // Corrección de nombre
+      fechaMax: this.taskUpdateForm.value.fechaMax         // Corrección de nombre
+    };
+  
+    this.taskService.updateTask(tarea, token).subscribe(
+      (response) => {
+        alert('Tarea actualizada con éxito');
+        console.log(tarea)
+        const index = this.selectedProjectTasks.findIndex(t => t.id === tarea.id);
+        if (index !== -1) {
+          this.selectedProjectTasks[index] = tarea; // Actualizar la tarea en la lista
+        }
+        this.closeTaskEditModal()
+      },
+      (error) => {
+        console.error('Error al actualizar la tarea:', error);
+        console.log(tarea)
+        alert('Hubo un error al actualizar la tarea');
+      }
+    );
+  }
   
 }

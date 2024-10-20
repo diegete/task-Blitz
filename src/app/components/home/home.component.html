@@ -1,100 +1,107 @@
-<div class="container">
-  <!-- Primer rectángulo: Proyectos y Prioridades -->
-  <div class="rectangulo-izquierda">
-    <h2>Bienvenido: {{ userData?.username }}</h2>
-
-    <h3>Proyectos:</h3>
-    <ul>
-      <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
-        {{ proyecto.title }}
-      </li>
-    </ul>
-
-    <!-- Formulario para priorizar un proyecto seleccionado -->
-    <div *ngIf="selectedProject">
-      <h3>Priorizar Proyecto: {{ selectedProject.title }}</h3>
-      <label for="prioridad-{{ selectedProject.id }}">Prioridad:</label>
-      <select 
-        id="prioridad-{{ selectedProject.id }}" 
-        [(ngModel)]="selectedProject.prioridad" 
-        (change)="actualizarPrioridad(selectedProject)">
-        <option [value]="1">Baja</option>
-        <option [value]="3">Media</option>
-        <option [value]="5">Alta</option>
-      </select>
-    </div>
-
-    <button (click)="openProjectModal()">Crear Proyecto</button>
-  </div>
-
-  <!-- Segundo rectángulo: Tareas del proyecto seleccionado -->
-  <div class="rectangulo-centro" *ngIf="selectedProject">
-    <h3>Tareas del Proyecto: {{ selectedProject.title }}</h3>
-    <ul>
-      <li *ngFor="let tarea of selectedProjectTasks" 
-          (click)="!tarea.asignada && selectTask(tarea)"
-          [class.asignada]="tarea.asignada">
-        {{ tarea.titulo }}
-      </li>
-    </ul>
-    <button (click)="openTaskModal()">Crear Tarea</button>
-  </div>
-
-  <!-- Tercer rectángulo: Asignar tareas a un usuario del proyecto -->
-  <div class="rectangulo-derecha" *ngIf="selectedProject">
-    <h3>Asignar Tarea a Usuarios</h3>
-    <p>Seleccione un usuario del proyecto:</p>
-    <ul>
-      <li *ngFor="let miembro of selectedProject.members" 
-          (click)="toggleSelectUser(miembro)" 
-          [class.selected]="miembro.selected">
-        {{ miembro.username }}
-      </li>
-    </ul>
-    <button (click)="confirmAssign()">Asignar Tareas</button>
-  </div>
-
-  <!-- Modales -->
-  <div *ngIf="isProjectModalOpen" class="modal">
-    <div class="modal-content">
-      <h2>Crear Proyecto</h2>
-      <form [formGroup]="projectForm" (ngSubmit)="crearProyecto()">
-        <label for="title">Título del proyecto:</label>
-        <input formControlName="title" id="title" type="text">
-        <button type="submit" [disabled]="projectForm.invalid">Crear Proyecto</button>
-        <button type="button" (click)="closeProjectModal()">Cerrar</button>
-      </form>
-    </div>
-  </div>
-
-  <div *ngIf="isTaskModalOpen" class="modal">
-    <div class="modal-content">
-      <h2>Crear Tarea</h2>
-      <form [formGroup]="taskForm" (ngSubmit)="createTask()">
-        <label for="titulo">Título:</label>
-        <input formControlName="titulo" id="titulo" type="text">
-
-        <label for="descripcion">Descripción:</label>
-        <textarea formControlName="descripcion" id="descripcion"></textarea>
-
-        <label for="carga">Carga de trabajo:</label>
-        <select formControlName="carga" id="carga">
-          <option value="5">Alto</option>
-          <option value="3">Medio</option>
-          <option value="1">Bajo</option>
+@if (userData) {
+  <div class="container">
+    <!-- Primer rectángulo: Proyectos y Prioridades -->
+    <div class="rectangulo-izquierda">
+      <h2>Bienvenido: {{ userData?.username }}</h2>
+  
+      <h3>Proyectos:</h3>
+      <ul>
+        <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
+          {{ proyecto.title }}
+        </li>
+      </ul>
+  
+      <!-- Formulario para priorizar un proyecto seleccionado -->
+      <div *ngIf="selectedProject">
+        <h3>Priorizar Proyecto: {{ selectedProject.title }}</h3>
+        <label for="prioridad-{{ selectedProject.id }}">Prioridad:</label>
+        <select 
+          id="prioridad-{{ selectedProject.id }}" 
+          [(ngModel)]="selectedProject.prioridad" 
+          (change)="actualizarPrioridad(selectedProject)">
+          <option [value]="1">Baja</option>
+          <option [value]="3">Media</option>
+          <option [value]="5">Alta</option>
         </select>
-        <label for="fechaInicio">Fecha inicio:</label>
-        <input formControlName="fechaInicio" id="fechaInicio" type="date">
-
-        <label for="fecha">Fecha max:</label>
-        <input formControlName="fecha" id="fecha" type="date">
-
-        <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
-        <button type="button" (click)="closeTaskModal()">Cerrar</button>
-      </form>
+      </div>
+  
+      <button (click)="openProjectModal()">Crear Proyecto</button>
+    </div>
+  
+    <!-- Segundo rectángulo: Tareas del proyecto seleccionado -->
+    <div class="rectangulo-centro" *ngIf="selectedProject">
+      <h3>Tareas del Proyecto: {{ selectedProject.title }}</h3>
+      <ul>
+        <li *ngFor="let tarea of selectedProjectTasks" 
+            (click)="!tarea.asignada && selectTask(tarea)"
+            [class.asignada]="tarea.asignada">
+          {{ tarea.titulo }}
+        </li>
+      </ul>
+      <button (click)="openTaskModal()">Crear Tarea</button>
+      <button (click)="openTaskEditModal()">Actualizar la tarea</button>
+    </div>
+  
+    <!-- Tercer rectángulo: Asignar tareas a un usuario del proyecto -->
+    <div class="rectangulo-derecha" *ngIf="selectedProject">
+      <h3>Asignar Tarea a Usuarios</h3>
+      <p>Seleccione un usuario del proyecto:</p>
+      <ul>
+        <li *ngFor="let miembro of selectedProject.members" 
+            (click)="toggleSelectUser(miembro)" 
+            [class.selected]="miembro.selected">
+          {{ miembro.username }}
+        </li>
+      </ul>
+      <button (click)="confirmAssign()">Asignar Tareas</button>
+    </div>
+  
+    <!-- Modales -->
+    <div *ngIf="isProjectModalOpen" class="modal">
+      <div class="modal-content">
+        <h2>Crear Proyecto</h2>
+        <form [formGroup]="projectForm" (ngSubmit)="crearProyecto()">
+          <label for="title">Título del proyecto:</label>
+          <input formControlName="title" id="title" type="text">
+          <button type="submit" [disabled]="projectForm.invalid">Crear Proyecto</button>
+          <button type="button" (click)="closeProjectModal()">Cerrar</button>
+        </form>
+      </div>
+    </div>
+  
+    <div *ngIf="isTaskModalOpen" class="modal">
+      <div class="modal-content">
+        <h2>Crear Tarea</h2>
+        <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+          <label for="titulo">Título:</label>
+          <input formControlName="titulo" id="titulo" type="text">
+  
+          <label for="descripcion">Descripción:</label>
+          <textarea formControlName="descripcion" id="descripcion"></textarea>
+  
+          <label for="carga">Carga de trabajo:</label>
+          <select formControlName="carga" id="carga">
+            <option value="5">Alto</option>
+            <option value="3">Medio</option>
+            <option value="1">Bajo</option>
+          </select>
+          <label for="fechaIncio">Fecha inicio:</label>
+          <input formControlName="fechaIncio" id="fechaIncio" type="date">
+  
+          <label for="fechaMax">Fecha max:</label>
+          <input formControlName="fechaMax" id="fechaMax" type="date">
+  
+          <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
+          <button type="button" (click)="closeTaskModal()">Cerrar</button>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+}@else {
+  <div><h2>No Existe ningún usuario con sessión activo</h2>
+  </div>
+}
+
 
 <ng-template #noProyectos>
   <p>No tienes proyectos disponibles.</p>
@@ -124,5 +131,37 @@
     <h2>¿Seguro que desea asignar las tareas a {{ selectedUser?.username }}?</h2>
     <button (click)="assignTask()">Confirmar</button>
     <button (click)="closeConfirmModal()">Cancelar</button>
+  </div>
+</div>
+
+<div class="modal" *ngIf="isTaskModalUpdateOpen" class="modal">
+  <div class="modal-content">
+    <form [formGroup]="taskUpdateForm">
+      <h2>Detalles de la Tarea</h2>
+    <p><strong>Título:</strong> {{ tareaup.titulo}}</p>
+    <label for="titulo">Título:</label>
+    <input formControlName="titulo" id="titulo" type="text">
+
+    <p><strong>Descripción:</strong> {{ tareaup.descripcion}}</p>
+    <textarea formControlName="descripcion" id="descripcion"></textarea>
+
+    <p><strong>Carga de trabajo:</strong> {{tareaup.carga}}</p>
+    <select formControlName="carga" id="carga">
+      <option value="5">Alto</option>
+      <option value="3">Medio</option>
+      <option value="1">Bajo</option>
+    </select>
+
+    <p><strong>Fecha de inicio:</strong> {{ tareaup.fechaInicio }}</p>
+    <label for="fechaInicio">Fecha inicio:</label>
+    <input formControlName="fechaInicio" id="fechaInicio" type="date">
+
+    <p><strong>Fecha entrega:</strong> {{tareaup.fechamax}}</p>
+    <label for="fechaMax">Fecha max:</label>
+    <input formControlName="fechaMax" id="fechaMax" type="date">
+
+    <button type="submit" (click)="updateTask()" >Actualizar Tarea</button>
+    <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
+    </form>
   </div>
 </div>
