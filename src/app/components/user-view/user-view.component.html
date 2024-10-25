@@ -1,4 +1,4 @@
-<div class="container">
+@if (userData) { <div class="container">
   <!-- Rectángulo de proyectos -->
   <div class="rectangulo-izquierda">
     <h2>
@@ -31,20 +31,40 @@
       <p>No hay tareas asignadas para este proyecto o no ha seleccionado ningún proyecto.</p>
     </ng-template>
   </div>
+</div>
+}@else {
+  <p>No hay datos de usuario.</p>
+} 
+
 
   <!-- Modal para los detalles de la tarea -->
   <div class="modal" [class.open]="isModalOpen">
     <div class="modal-content">
       <h2>Detalles de la Tarea</h2>
-      <p><strong>Título:</strong> {{ selectedTask?.tarea.titulo }}</p>
-      <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
-      <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
-      <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
-      <p><strong>Fecha entrega:</strong> {{selectedTask?.tarea.fechamax | date: 'short'}}</p>
-      <button type="button" (click)="closeModal()">Cerrar</button>
+      <form [formGroup]="taskUpdateForm" (ngSubmit)="enviarAvance()">
+        <p><strong>Título:</strong> {{ selectedTask?.tarea.titulo }}</p>
+        <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
+        <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
+        <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
+        <p><strong>Fecha entrega:</strong> {{ selectedTask?.tarea.fechamax | date: 'short' }}</p>
+  
+        <!-- Selector de avance con FormControl -->
+        <label for="avance">Selecciona el Avance:</label>
+        <select id="avance" formControlName="avance" required>
+          <option value="iniciada">Iniciada</option>
+          <option value="en curso">En Curso</option>
+          <option value="finalizada">Finalizada</option>
+        </select>
+  
+        <!-- Botones -->
+        <button type="submit" [disabled]="taskUpdateForm.invalid">Enviar Avance</button>
+        <button type="button" (click)="closeModal()">Cerrar</button>
+      </form>
     </div>
   </div>
-</div>
+  
+  
+
 
   <!-- Modal de invitaciones pendientes -->
   <div class="modal" [class.open]="isInvitationModalOpen">
@@ -64,4 +84,6 @@
       <button type="button" (click)="closeInvitationModal()">Cerrar</button>
     </div>
   </div>
+
+
 

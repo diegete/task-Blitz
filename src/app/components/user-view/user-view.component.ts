@@ -3,12 +3,13 @@ import { UserdataService } from '../../services/userdata.service';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { CreateTasksService } from '../../services/create-tasks.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'app-user-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule],
   templateUrl: './user-view.component.html',
   styleUrl: './user-view.component.css'
 })
@@ -24,12 +25,19 @@ export class UserViewComponent {
   isInvitationModalOpen = false; // Controla la apertura del modal de invitaciones
   pendingInvitationCount = 0;
   showInvitations: boolean = false;
+  taskUpdateForm: FormGroup;
+
 
   constructor(
     private userService: UserdataService, 
     private loginService: LoginService, 
-    private createTask: CreateTasksService, 
-    ) {}
+    private createTask: CreateTasksService,
+    private formBuilder: FormBuilder
+    ) {
+      this.taskUpdateForm = this.formBuilder.group({
+        avance: ['', Validators.required],
+      });
+    }
 
     ngOnInit(): void {
       if (this.userService.isLoggedIn()) {
@@ -124,6 +132,10 @@ export class UserViewComponent {
   openTaskModal(tarea: any): void {
     this.selectedTask = tarea;
     this.isTaskModalOpen = true;
+
+    this.taskUpdateForm.patchValue({
+      avance: tarea.avance || '',
+    });
   }
 
   closeTaskModal(): void {
@@ -144,6 +156,45 @@ export class UserViewComponent {
     this.isInvitationModalOpen = !this.isInvitationModalOpen;
   }
 
+
+ // user-view.component.ts
+ enviarAvance(): void {
+    if (this.taskUpdateForm.invalid) {
+      alert('Por favor, selecciona un avance.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('No se encontró el token. Por favor, inicia sesión.');
+      return;
+    }
+
+    const avance = this.taskUpdateForm.get('avance')?.value;
+
+    const avanceData: any = { avance };
+
+    // Si el avance es "finalizada", añadir "estado: true"
+    if (avance === 'finalizada') {
+      avanceData.estado = true;
+    }
+
+    this.userService.updateTaskProgress(this.selectedTask.tarea.id, avanceData, token).subscribe(
+      (response) => {
+        alert('Estado de avance actualizado con éxito');
+        console.log('Respuesta del servidor:', response);
+        
+        this.closeTaskModal();
+      },
+      (error) => {
+        console.error('Error al actualizar el avance de la tarea:', error);
+        alert('Hubo un error al actualizar el estado de avance');
+      }
+    );
+  }
+
+
+  
 }
 
 

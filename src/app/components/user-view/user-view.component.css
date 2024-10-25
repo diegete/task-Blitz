@@ -209,7 +209,9 @@
   
   .invitation-button {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 7px;
+    width: 80x;
+    height: 140px;
     position: relative;
     top: -5px;
   }
@@ -289,4 +291,130 @@
 
 .modal-content button.reject:hover {
   background-color: #c82333;
+}
+/* Contenedor principal del modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px; /* Más ancho */
+  height: auto;
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 999;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Mostrar el modal cuando esté abierto */
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Contenido del modal */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Título del modal */
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+/* Texto descriptivo */
+.modal-content p {
+  color: #495057;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+/* Estilo del selector de avance */
+.modal-content select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  appearance: none; /* Ocultar flecha predeterminada */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23999" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+/* Efecto al enfocar el selector */
+.modal-content select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botones */
+.modal-content button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Botón de aceptar */
+.modal-content button.accept {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-content button.accept:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Botón de cerrar/rechazar */
+.modal-content button.reject {
+  background-color: #dc3545;
+  color: white;
+  margin-top: 10px;
+}
+
+.modal-content button.reject:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Estilo responsivo para dispositivos pequeños */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .modal-content h2 {
+    font-size: 1.5em;
+  }
+}
+
+/* Transición suave en el modal */
+.modal-content {
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal.open .modal-content {
+  transform: scale(1);
 }

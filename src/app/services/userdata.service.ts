@@ -8,7 +8,7 @@ import { catchError, Observable, of } from 'rxjs';
 })
 export class UserdataService {
   private apiUrl= 'http://localhost:8000/api/user-data/'
-
+  private apiUlr2= 'http://localhost:8000/'
   constructor(private http: HttpClient) { }
 
   getDecodedToken(): any{
@@ -38,5 +38,10 @@ export class UserdataService {
     const token = localStorage.getItem('token');
     return !!token;
   }
+// task.service.ts
+updateTaskProgress(tareaId: number, data: any, token: string): Observable<any> {
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.patch(`${this.apiUlr2}tareas/${tareaId}/avance/`, data, { headers });
+}
 
 }
