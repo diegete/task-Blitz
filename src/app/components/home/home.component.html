@@ -47,14 +47,23 @@
       <h3>Asignar Tarea a Usuarios</h3>
       <p>Seleccione un usuario del proyecto:</p>
       <ul>
-        <li *ngFor="let miembro of selectedProject.members" 
+        <li *ngFor="let miembro of selectedProject.members"
             (click)="toggleSelectUser(miembro)" 
             [class.selected]="miembro.selected">
           {{ miembro.username }}
+    
+          <!-- Barra de carga -->
+          <div class="progress-bar-container">
+            <div class="progress-bar" 
+                 [style.width.%]="getCargaPercentage(miembro.profile.cargaTrabajo)">
+            </div>
+          </div>
+          <p class="carga-text">{{ miembro.profile.cargaTrabajo }} / 10</p>
         </li>
       </ul>
       <button (click)="confirmAssign()">Asignar Tareas</button>
     </div>
+    
   
     <!-- Modales -->
     <div *ngIf="isProjectModalOpen" class="modal">

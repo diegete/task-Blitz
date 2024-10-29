@@ -151,13 +151,16 @@ export class HomeComponent {
   closeTaskEditModal(): void{
     this.isTaskModalUpdateOpen = false
   }
-
+  getCargaPercentage(cargaTrabajo: number): number {
+    // Calcula el porcentaje de carga con base en un máximo de 10.
+    return (cargaTrabajo / 10) * 100;
+  }
+  
   // fixed ahora funciona como deberia 
   selectProject(proyecto: any): void {
     this.selectedProject = proyecto;
     this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
-
-    // Restablecer la tarea seleccionada al cambiar de proyecto
+    // Restablecer la tarea seleccionada al cambiar de proyecto 
     this.assignTaskForm.reset();  // Restablece el formulario de asignación de tareas
     this.selectedUser = null;  // Desmarca cualquier usuario seleccionado
 
@@ -256,34 +259,45 @@ assignTask(): void {
   const token = localStorage.getItem('token');
 
   console.log('Datos del formulario antes de enviar:', this.assignTaskForm.value);
+
   if (this.assignTaskForm.valid) {
     const assignData = {
-      tarea: this.assignTaskForm.value.tarea,  // Debería ser el id de la tarea
+      tarea: this.assignTaskForm.value.tarea, // Debería ser el id de la tarea
       miembro: this.assignTaskForm.value.miembro
     };
 
     if (token) {
-      this.taskService.asignarTask(assignData, token).subscribe(response => {
-        console.log('Tarea asignada:', response);
+      this.taskService.asignarTask(assignData, token).subscribe(
+        response => {
+          console.log('Tarea asignada:', response);
 
-        // Encuentra la tarea asignada en el array y márcala como tachada
-        const tareaIndex = this.selectedProjectTasks.findIndex(t => t.id === assignData.tarea);
-        if (tareaIndex !== -1) {
-          this.selectedProjectTasks[tareaIndex].asignada = true; // Suponiendo que 'asignada' es la propiedad que indica que la tarea está completada/asignada
+          // Encuentra la tarea asignada en el array y márcala como tachada
+          const tareaIndex = this.selectedProjectTasks.findIndex(t => t.id === assignData.tarea);
+          if (tareaIndex !== -1) {
+            this.selectedProjectTasks[tareaIndex].asignada = true; // Suponiendo que 'asignada' es la propiedad que indica que la tarea está completada/asignada
+          }
+
+          this.closeAssignTaskModal();
+          this.closeConfirmModal();
+          alert('Se ha asignado la tarea con éxito.');
+        },
+        error => {
+          console.error('Error al asignar la tarea:', error);
+
+          // Manejo específico para el error de carga máxima
+          if (error.error?.error === "Asignación excede la carga máxima permitida.") {
+            alert('Ocurrió un error al asignar la tarea. Inténtalo nuevamente.');
+          } else {
+            alert('No se pudo asignar la tarea: la carga máxima del trabajador ha sido excedida.');
+          }
         }
-
-        this.closeAssignTaskModal();
-        this.closeConfirmModal();
-        alert('se ha asignado la tarea');
-      });
+      );
     }
   } else {
-    alert('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.')
+    alert('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.');
   }
 }
 
-
-  
 
    // Método para confirmar la asignación de tareas
    confirmAssign(): void {
