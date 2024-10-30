@@ -144,33 +144,43 @@
 </div>
 
 <div class="modal" *ngIf="isTaskModalUpdateOpen" class="modal">
-  <div class="modal-content">
-    <form [formGroup]="taskUpdateForm">
-      <h2>Detalles de la Tarea</h2>
-    <p><strong>Título:</strong> {{ tareaup.titulo}}</p>
-    <label for="titulo">Título:</label>
-    <input formControlName="titulo" id="titulo" type="text">
-
-    <p><strong>Descripción:</strong> {{ tareaup.descripcion}}</p>
-    <textarea formControlName="descripcion" id="descripcion"></textarea>
-
-    <p><strong>Carga de trabajo:</strong> {{tareaup.carga}}</p>
-    <select formControlName="carga" id="carga">
-      <option value="5">Alto</option>
-      <option value="3">Medio</option>
-      <option value="1">Bajo</option>
-    </select>
-
-    <p><strong>Fecha de inicio:</strong> {{ tareaup.fechaInicio }}</p>
-    <label for="fechaInicio">Fecha inicio:</label>
-    <input formControlName="fechaInicio" id="fechaInicio" type="date">
-
-    <p><strong>Fecha entrega:</strong> {{tareaup.fechamax}}</p>
-    <label for="fechaMax">Fecha max:</label>
-    <input formControlName="fechaMax" id="fechaMax" type="date">
-
-    <button type="submit" (click)="updateTask()" >Actualizar Tarea</button>
+  @if(tareaup){
+    <div class="modal-content">
+      <form [formGroup]="taskUpdateForm">
+        <h2>Detalles de la Tarea</h2>
+      <p><strong>Título:</strong> {{ tareaup.titulo}}</p>
+      <label for="titulo">Título:</label>
+      <input formControlName="titulo" id="titulo" type="text">
+  
+      <p><strong>Descripción:</strong> {{ tareaup.descripcion}}</p>
+      <textarea formControlName="descripcion" id="descripcion"></textarea>
+  
+      <p><strong>Carga de trabajo:</strong> {{tareaup.carga}}</p>
+      <select formControlName="carga" id="carga">
+        <option value="5">Alto</option>
+        <option value="3">Medio</option>
+        <option value="1">Bajo</option>
+      </select>
+  
+      <p><strong>Fecha de inicio:</strong> {{ tareaup.fechaInicio }}</p>
+      <label for="fechaInicio">Fecha inicio:</label>
+      <input formControlName="fechaInicio" id="fechaInicio" type="date">
+  
+      <p><strong>Fecha entrega:</strong> {{tareaup.fechamax}}</p>
+      <label for="fechaMax">Fecha max:</label>
+      <input formControlName="fechaMax" id="fechaMax" type="date">
+  
+      <button type="submit" (click)="updateTask()" >Actualizar Tarea</button>
+      <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
+      </form>
+    </div>
+  }@else {
+   <div class="modal">
+    <div class="modal-content">
+      <h3>no ha seleccionado ningúna tarea para actulizar</h3>
+    </div>
     <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
-    </form>
-  </div>
+  </div> 
+  }
+
 </div>

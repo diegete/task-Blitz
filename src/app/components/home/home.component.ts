@@ -69,7 +69,7 @@ export class HomeComponent {
     // Inicializar el formulario para asignar tareas
     this.assignTaskForm = this.formBuilder.group({
       tarea: ['', Validators.required],
-      miembro: ['', Validators.required]
+      miembro: ['' , Validators.required]
     });
     // Inicializar el formulario invitaciones
     this.invitationForm = this.formBuilder.group({
@@ -151,6 +151,7 @@ export class HomeComponent {
   closeTaskEditModal(): void{
     this.isTaskModalUpdateOpen = false
   }
+  // barra de carga trabajadores
   getCargaPercentage(cargaTrabajo: number): number {
     // Calcula el porcentaje de carga con base en un máximo de 10.
     return (cargaTrabajo / 10) * 100;
@@ -271,10 +272,22 @@ assignTask(): void {
         response => {
           console.log('Tarea asignada:', response);
 
-          // Encuentra la tarea asignada en el array y márcala como tachada
+          // Encuentra la tarea asignada y usa su carga
+          const tareaAsignada = this.selectedProjectTasks.find(t => t.id === assignData.tarea);
+          const miembro = this.selectedProject.members.find((m: { id: any }) => m.id === assignData.miembro);
+
+          if (tareaAsignada && miembro) {
+            const cargaTarea = Number(tareaAsignada.carga) || 0; // Asegúrate de que la carga sea un número
+            const cargaActual = Number(miembro.profile.cargaTrabajo) || 0; // Conversión a número seguro
+
+            miembro.profile.cargaTrabajo = cargaActual + cargaTarea; // Suma correcta de la carga
+            console.log(`Nueva carga para ${miembro.username}: ${miembro.profile.cargaTrabajo}`);
+          }
+
+          // Marcar la tarea como asignada
           const tareaIndex = this.selectedProjectTasks.findIndex(t => t.id === assignData.tarea);
           if (tareaIndex !== -1) {
-            this.selectedProjectTasks[tareaIndex].asignada = true; // Suponiendo que 'asignada' es la propiedad que indica que la tarea está completada/asignada
+            this.selectedProjectTasks[tareaIndex].asignada = true;
           }
 
           this.closeAssignTaskModal();
@@ -284,11 +297,10 @@ assignTask(): void {
         error => {
           console.error('Error al asignar la tarea:', error);
 
-          // Manejo específico para el error de carga máxima
           if (error.error?.error === "Asignación excede la carga máxima permitida.") {
-            alert('Ocurrió un error al asignar la tarea. Inténtalo nuevamente.');
-          } else {
             alert('No se pudo asignar la tarea: la carga máxima del trabajador ha sido excedida.');
+          } else {
+            alert('Ocurrió un error al asignar la tarea. Inténtalo nuevamente.');
           }
         }
       );
@@ -297,6 +309,7 @@ assignTask(): void {
     alert('Formulario inválido. Asegúrate de seleccionar una tarea y un miembro.');
   }
 }
+
 
 
    // Método para confirmar la asignación de tareas
