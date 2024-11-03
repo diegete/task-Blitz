@@ -51,6 +51,7 @@
             (click)="toggleSelectUser(miembro)" 
             [class.selected]="miembro.selected">
           {{ miembro.username }}
+          <p class="carga-text">Carga de trabajo</p> 
     
           <!-- Barra de carga -->
           <div class="progress-bar-container">
@@ -113,10 +114,10 @@
 
 
 <ng-template #noProyectos>
-  <p>No tienes proyectos disponibles.</p>
+  <p >No tienes proyectos disponibles.</p>
 </ng-template>
 <div *ngIf="selectedProject">
-  <button (click)="openInvitationModal()">Invitar Miembros</button>
+  <button class="invite-button" (click)="openInvitationModal()">Invitar Miembros</button>
 </div>
 
 <!-- Modal para enviar invitaciones -->
@@ -175,12 +176,12 @@
       </form>
     </div>
   }@else {
-   <div class="modal">
-    <div class="modal-content">
-      <h3>no ha seleccionado ningúna tarea para actulizar</h3>
-    </div>
-    <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
-  </div> 
+    <div class="modal">
+      <div class="modal-content">
+        <h3 class="no-task-message">No ha seleccionado ninguna tarea para actualizar</h3>
+        <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
+      </div>
+    </div>    
   }
 
 </div>

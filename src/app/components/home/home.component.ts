@@ -96,6 +96,7 @@ export class HomeComponent {
         this.get_task();
       });
     } else {
+      alert('No ha iniciado sesión')
       console.log('No hay un usuario autenticado');
     }
     
@@ -166,11 +167,11 @@ export class HomeComponent {
     this.selectedUser = null;  // Desmarca cualquier usuario seleccionado
 
     const token = localStorage.getItem('token');
-    console.log(proyecto.members); // Verifica la estructura completa de los miembros
+    //console.log(proyecto.members); // Verifica la estructura completa de los miembros
 
     // Ahora que el ID está incluido, se puede acceder directamente
     const memberIds = proyecto.members.map((member: any) => member.id); 
-    console.log(memberIds); // Verifica los IDs extraídos
+    //console.log(memberIds); // Verifica los id obtenidos
 
     if (token && memberIds.length > 0) {
       this.taskService.getMembersDetails(memberIds, token).subscribe(response => {
@@ -237,7 +238,7 @@ createTask(): void {
     if (token) {
       this.taskService.gettask(token).subscribe(response => {
         this.userData.tareas = response.tareas;
-        console.log('Tareas obtenidas:', this.userData.tareas); // Verifica que el id está presente
+        // console.log('Tareas obtenidas:', this.userData.tareas); // Verifica que el id está presente
       });
     }
   }
@@ -251,7 +252,7 @@ createTask(): void {
     id: tarea.id  
   });
   this.tareaup = tarea
-  console.log('Tarea seleccionada:', tarea); // Verifica que el id está presente
+  //console.log('Tarea seleccionada:', tarea); // Verifica que el id está presente
 }
 
   

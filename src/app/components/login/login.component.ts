@@ -53,9 +53,9 @@ export class LoginComponent {
   
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       (response) => {
-        console.log('Inicio de sesión exitoso', response);
+        // console.log('Inicio de sesión exitoso', response);
         this.authService.setToken(response.access); // Guardar el token
-        console.log('Token guardado:', this.authService.getToken());
+        //console.log('Token guardado:', this.authService.getToken()); mostrar el token 
   
         // Obtener los datos del usuario
         this.userService.getUserData().subscribe(data => {

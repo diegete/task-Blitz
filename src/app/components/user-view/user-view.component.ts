@@ -91,7 +91,11 @@ export class UserViewComponent {
         response => {
           console.log('Invitación aceptada:', response);
           this.removeInvitationFromList(invitationId);
-        },
+          this.userService.getUserData().subscribe(data => {
+            this.userData = data;
+            this.loadPendingInvitations();} // recarga de datos por invitación aceptada.
+          
+      )},
         error => {
           console.error('Error al aceptar la invitación:', error);
         }
