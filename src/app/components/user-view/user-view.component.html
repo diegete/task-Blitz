@@ -32,6 +32,24 @@
     </ng-template>
   </div>
 </div>
+<div *ngIf="selectedProject">
+  <div class="chat-container">
+    <h3>Chat del Proyecto</h3>
+    <div class="chat-messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
+        <strong>{{ msg.user }}:</strong> {{ msg.content }}
+      </div>
+    </div>
+    <div class="chat-input-container">
+      <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
+      <button (click)="sendMessage()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
 }@else {
   <p>No hay datos de usuario.</p>
 } 
