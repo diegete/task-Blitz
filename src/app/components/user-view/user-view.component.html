@@ -1,13 +1,18 @@
 @if (userData) { <div class="container">
   <!-- Rectángulo de proyectos -->
   <div class="rectangulo-izquierda">
-    <h2>
-      Bienvenido: {{ userData?.username }}
-      <!-- Botón para mostrar invitaciones cerca del nombre de usuario -->
-      <div class="invitation-button">
-        <button (click)="toggleInvitations()">📨 Invitaciones ({{ pendingInvitations.length }})</button>
+    <div class="welcome-container">
+      <div class="profile-info">
+        <img
+          [src]="userData.profile.image || 'ruta/imagen/por/defecto.jpg'"
+          alt="Imagen de perfil"
+          class="profile-image"
+          (click)="openImageModal()"
+        />
+        <span>Bienvenido, {{ userData.username }}</span>
       </div>
-    </h2>
+    </div>
+    
     
     <h3>Proyectos:</h3>
     <ul>
@@ -103,5 +108,15 @@
     </div>
   </div>
 
+  <div class="modal-overlay" *ngIf="showImageModal">
+    <div class="modal-content">
+      <span class="close-button" (click)="closeImageModal()">×</span>
+      <h2>Actualizar Imagen de Perfil</h2>
+      <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-image-preview" />
+      <input type="file" (change)="onImageSelected($event)" />
+      <button (click)="updateProfile()">Actualizar Imagen</button>
+    </div>
+  </div>
+  
 
 

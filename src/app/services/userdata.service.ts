@@ -9,6 +9,8 @@ import { catchError, Observable, of } from 'rxjs';
 export class UserdataService {
   private apiUrl= 'http://localhost:8000/api/user-data/'
   private apiUlr2= 'http://localhost:8000/'
+  private baseUrl = 'http://localhost:8000/profile/update/'
+  
   constructor(private http: HttpClient) { }
 
   getDecodedToken(): any{
@@ -42,6 +44,11 @@ export class UserdataService {
 updateTaskProgress(tareaId: number, data: any, token: string): Observable<any> {
   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   return this.http.patch(`${this.apiUlr2}tareas/${tareaId}/avance/`, data, { headers });
+}
+
+updateProfile(formData: FormData, token: string): Observable<any> {
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.put(`${this.baseUrl}`, formData, { headers });
 }
 
 }

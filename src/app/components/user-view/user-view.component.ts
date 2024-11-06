@@ -16,10 +16,14 @@ import { ChatService } from '../../services/chat.service';
 })
 export class UserViewComponent {
   userData: any = null; 
+  // img actulizar
+  selectedImage: File | null = null;
+  //
   selectedProject: any = null; 
   selectedProjectTasks: any[] = []; 
   selectedTask: any = null;
   isTaskModalOpen = false;
+  showImageModal = false;
   isModalOpen = false;
   pendingInvitations: any[] = [];
   token: string | null = null;  // Variable para almacenar el token
@@ -31,6 +35,7 @@ export class UserViewComponent {
   chatMessages: any[] = [];
   newMessage: string = '';
   private chatRefreshInterval: any;
+  
 
   constructor(
     private chatService: ChatService,
@@ -43,11 +48,16 @@ export class UserViewComponent {
         avance: ['', Validators.required],
       });
     }
-
+    
     ngOnInit(): void {
       if (this.userService.isLoggedIn()) {
         this.userService.getUserData().subscribe(data => {
+           let BACKEND_URL = 'http://localhost:8000';
           this.userData = data;
+          let img;
+          img = BACKEND_URL+this.userData.profile.image;
+          this.userData.profile.image = img
+
           this.loadPendingInvitations();
         });
   
@@ -56,7 +66,7 @@ export class UserViewComponent {
           if (this.selectedProject) {
             this.loadMessages();
           }
-        }, 4000);
+        }, 4500);
       } else {
         console.log('No hay un usuario autenticado');
       }
@@ -175,6 +185,17 @@ export class UserViewComponent {
     this.isInvitationModalOpen = !this.isInvitationModalOpen;
   }
 
+  openImageModal(): void {
+    console.log('Modal abierto');
+    this.showImageModal = true;
+  }
+  
+  closeImageModal(): void {
+    this.showImageModal = false;
+  }
+  
+
+
 
  // user-view.component.ts
  enviarAvance(): void {
@@ -233,11 +254,44 @@ sendMessage(): void {
       message => {
         this.chatMessages.push(message);  // Agregar el mensaje a la lista localmente
         this.newMessage = '';  // Limpiar el campo de entrada
-        this.loadMessages();  // Recargar mensajes después de enviar
+        
       },
       error => console.error('Error al enviar mensaje:', error)
     );
   } else if (!this.token) {
+    console.error('Token no disponible. El usuario no está autenticado.');
+  }
+}
+
+onImageSelected(event: any): void {
+  this.selectedImage = event.target.files[0];
+}
+updateProfile(): void {
+  const formData = new FormData();
+  if (this.selectedImage) {
+    formData.append('image', this.selectedImage);
+  }
+
+  if (this.token) {
+    this.userService.updateProfile(formData, this.token).subscribe(
+      response => {
+        console.log('Perfil actualizado con éxito', response);
+        alert('Perfil actualizado con éxito')
+        this.userService.getUserData().subscribe(data => {
+          this.userData = data;
+          let BACKEND_URL = 'http://localhost:8000';
+          this.userData = data;
+          let img;
+          img = BACKEND_URL+this.userData.profile.image;
+          this.userData.profile.image = img
+        })
+        // Aquí puedes actualizar `profileData` o mostrar un mensaje de éxito
+      },
+      error => {
+        console.error('Error al actualizar el perfil', error);
+      }
+    );
+  } else {
     console.error('Token no disponible. El usuario no está autenticado.');
   }
 }
