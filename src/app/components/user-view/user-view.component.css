@@ -36,7 +36,6 @@
   
   /* Rectángulos */
   .rectangulo-izquierda,
-  .rectangulo-centro,
   .rectangulo-derecha {
     border: 1px solid #dee2e6;
     padding: 20px;
@@ -44,13 +43,12 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     flex: 1;
-    min-width: 250px;
+    min-width: 390px;
   }
   
   .rectangulo-izquierda h2,
-  .rectangulo-centro h3,
   .rectangulo-derecha h3 {
-    font-size: 1.5em;
+    font-size: 2em;
     color: #495057;
   }
   
@@ -77,17 +75,18 @@
   /* Estilos del modal */
   .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     opacity: 0;
     visibility: hidden;
+    z-index: 999;
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   
@@ -98,11 +97,12 @@
   
   .modal-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
+    width: 80%;
+    max-width: 350px;
+    min-width: 200px;
     transform: scale(0.8);
     transition: transform 0.3s ease;
   }
@@ -607,6 +607,8 @@
 .welcome-container {
   display: flex;
   align-items: center;
+  max-width: 60px;
+  max-height: 40px;
 }
 
 .profile-info {
@@ -614,136 +616,113 @@
   align-items: center;
   cursor: pointer;
 }
-
-.profile-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-  object-fit: cover;
-}
-/* Overlay para oscurecer el fondo */
-.modal-overlay {
+/* Estilos generales para el modal */
+.modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  width: 98vw;
+  height: 98vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-  padding: 10px; /* Espacio adicional para el borde en pantallas pequeñas */
+  z-index: 999; /* Asegura que el modal esté por encima del resto */
 }
 
-/* Contenido del modal */
-.modal-content {
-  background: white;
+/* Estilos del contenedor del modal */
+.modal-container {
+  background-color: #fff; /* Fondo blanco para el modal */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  max-width: 90%;
-  position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
   text-align: center;
+  position: relative; /* Para posicionar el botón de cierre */
+  animation: fadeIn 0.3s ease; /* Animación de entrada */
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: scale(0.8);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
 }
 
 /* Botón de cierre */
-.close-button {
+.close-btn {
   position: absolute;
   top: 10px;
   right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
-  font-size: 18px;
+  color: #333;
 }
 
-/* Imagen de perfil de vista previa */
-.profile-image-preview {
-  width: 100px;
-  height: 100px;
+/* Imagen de perfil circular */
+.profile-image {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  margin-bottom: 15px;
+  margin: 20px auto;
   object-fit: cover;
+  display: block;
 }
 
-/* Contenido del modal */
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 400px; /* Anchura máxima para pantallas grandes */
-  position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-/* Botón de cierre */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* Imagen de perfil de vista previa */
-.profile-image-preview {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  object-fit: cover;
-}
-
-/* Input de archivo y botón */
-input[type="file"],
-button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* Estilo del botón de actualizar */
-button {
+/* Botón de subir imagen */
+.upload-btn {
   background-color: #4CAF50;
-  color: white;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+.upload-btn:hover {
   background-color: #45a049;
 }
 
-/* Estilos responsivos para pantallas pequeñas */
+/* Estilos para dispositivos móviles */
 @media (max-width: 600px) {
-  .modal-content {
-    padding: 15px;
-    max-width: 100%;
+  .modal-container {
+      width: 95%;
+      max-width: none;
+      border-radius: 0;
   }
 
-  .close-button {
-    font-size: 24px;
-    top: 5px;
-    right: 5px;
-  }
-
-  .profile-image-preview {
-    width: 70px;
-    height: 70px;
-  }
-
-  input[type="file"],
-  button {
-    font-size: 14px;
-    padding: 8px;
+  .profile-image {
+      width: 80px;
+      height: 80px;
   }
 }
 
+.img-prefil{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 175px;
+  height: 180px;
+  border-radius: 50%;
+  margin: 20px auto;
+  object-fit: cover;
+  display: block;
+}
 }
 
 

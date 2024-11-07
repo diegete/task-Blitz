@@ -1,10 +1,10 @@
-@if (userData) { <div class="container">
+@if (userData && userData.profile.user_type == 'empleado') { <div class="container">
   <!-- Rectángulo de proyectos -->
   <div class="rectangulo-izquierda">
     <div class="welcome-container">
       <div class="profile-info">
-        <img
-          [src]="userData.profile.image || 'ruta/imagen/por/defecto.jpg'"
+        <img class="img-perfil"
+          [src]="userData.profile.image || 'localhost:8000/media/imagen/imagen/por/defecto.jpg'"
           alt="Imagen de perfil"
           class="profile-image"
           (click)="openImageModal()"
@@ -108,13 +108,14 @@
     </div>
   </div>
 
-  <div class="modal-overlay" *ngIf="showImageModal">
+  <div class="modal-backdrop" *ngIf="showImageModal">
     <div class="modal-content">
-      <span class="close-button" (click)="closeImageModal()">×</span>
+      <span class="close-button" (click)="closeImageModal()"></span>
       <h2>Actualizar Imagen de Perfil</h2>
-      <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-image-preview" />
+      <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
       <input type="file" (change)="onImageSelected($event)" />
       <button (click)="updateProfile()">Actualizar Imagen</button>
+      <button class="alter" (click)="closeImageModal()"> Cerrar</button>
     </div>
   </div>
   
