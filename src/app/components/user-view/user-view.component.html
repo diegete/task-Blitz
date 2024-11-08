@@ -1,3 +1,4 @@
+
 @if (userData && userData.profile.user_type == 'empleado') { <div class="container">
   <!-- Rectángulo de proyectos -->
   <div class="rectangulo-izquierda">
@@ -37,20 +38,23 @@
     </ng-template>
   </div>
 </div>
-<div *ngIf="selectedProject">
-  <div class="chat-container">
-    <h3>Chat del Proyecto</h3>
-    <div class="chat-messages">
-      <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
-        <strong>{{ msg.user }}:</strong> {{ msg.content }}
+@if (selectedProject) {
+  <div >
+    <div class="chat-container">
+      <h3>Chat del Proyecto</h3>
+      <div class="chat-messages">
+        <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
+          <strong>{{ msg.user }}:</strong> {{ msg.content }}
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
+        <button (click)="sendMessage()">Enviar</button>
       </div>
     </div>
-    <div class="chat-input-container">
-      <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
-      <button (click)="sendMessage()">Enviar</button>
-    </div>
   </div>
-</div>
+}
+
 
 
 
@@ -113,11 +117,9 @@
       <span class="close-button" (click)="closeImageModal()"></span>
       <h2>Actualizar Imagen de Perfil</h2>
       <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
-      <input type="file" (change)="onImageSelected($event)" />
-      <button (click)="updateProfile()">Actualizar Imagen</button>
+      <input class="form-control" type="file" (change)="onImageSelected($event)" />
+      <button (click)="updateProfile()">Actualizar Imagen </button>
       <button class="alter" (click)="closeImageModal()"> Cerrar</button>
     </div>
   </div>
   
-
-

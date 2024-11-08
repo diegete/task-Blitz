@@ -96,15 +96,14 @@
   }
   
   .modal-content {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    max-width: 350px;
-    min-width: 200px;
-    transform: scale(0.8);
-    transition: transform 0.3s ease;
+    max-width: 90vw; /* Limita el ancho en pantallas pequeñas */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-height: 90vh; /* Limita el alto para evitar que el modal se salga de la pantalla */
+    overflow-y: auto; /* Permite desplazarse en caso de contenido largo */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
   
   .modal-content.open {
@@ -161,7 +160,7 @@
   
     /* Hacer que el modal ocupe más espacio en pantallas pequeñas */
     .modal-content {
-      width: 95%;
+      width: 85%;
       max-width: none;
       padding: 15px;
     }
@@ -421,7 +420,8 @@
 /* chat*/
 .chat-container {
   width: 100%;
-  max-width: 500px;
+  height: 50%;
+  max-width: 450px;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
@@ -441,7 +441,7 @@
 
 .chat-messages {
   padding: 10px;
-  height: 300px;
+  height: 200px;
   overflow-y: auto;
   background-color: #f9f9f9;
 }
@@ -607,7 +607,7 @@
 .welcome-container {
   display: flex;
   align-items: center;
-  max-width: 60px;
+  max-width: 55px;
   max-height: 40px;
 }
 
@@ -621,14 +621,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 98vw;
-  height: 98vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Asegura que el modal esté por encima del resto */
+  z-index: 999;
 }
+
+
 
 /* Estilos del contenedor del modal */
 .modal-container {
@@ -671,7 +673,7 @@
 .profile-image {
   width: 70px;
   height: 70px;
-  border-radius: 50%;
+  border-radius: 40%;
   margin: 20px auto;
   object-fit: cover;
   display: block;

@@ -10,7 +10,7 @@ import { ChatService } from '../../services/chat.service';
 @Component({
   selector: 'app-user-view',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,],
   templateUrl: './user-view.component.html',
   styleUrl: './user-view.component.css'
 })
@@ -35,7 +35,7 @@ export class UserViewComponent {
   chatMessages: any[] = [];
   newMessage: string = '';
   private chatRefreshInterval: any;
-  
+  isChatOpen = false;
 
   constructor(
     private chatService: ChatService,
@@ -59,6 +59,7 @@ export class UserViewComponent {
           this.userData.profile.image = img
 
           this.loadPendingInvitations();
+          this.openChat();
         });
   
         // Configurar el intervalo para actualizar los mensajes del chat cada 2 segundos
@@ -170,6 +171,12 @@ export class UserViewComponent {
   closeTaskModal(): void {
     this.isTaskModalOpen = false;
     this.selectedTask = null;
+  }
+  closeChat(): void{
+    this.isChatOpen = false;
+  }
+  openChat(): void{
+    this.isChatOpen = true;
   }
 
   showTaskDetail(tarea: any) {
