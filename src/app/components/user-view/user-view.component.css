@@ -74,20 +74,16 @@
   
   /* Estilos del modal */
   .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 600px;
-    background-color: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    opacity: 0;
-    visibility: hidden;
-    z-index: 999;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
   }
   
   .modal.open {
@@ -96,14 +92,13 @@
   }
   
   .modal-content {
-    max-width: 90vw; /* Limita el ancho en pantallas pequeñas */
-    width: 100%; /* Ocupa todo el ancho disponible */
-    max-height: 90vh; /* Limita el alto para evitar que el modal se salga de la pantalla */
-    overflow-y: auto; /* Permite desplazarse en caso de contenido largo */
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 450px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
   }
   
   .modal-content.open {
@@ -145,7 +140,6 @@
     }
   
     .rectangulo-izquierda,
-    .rectangulo-centro,
     .rectangulo-derecha {
       width: 100%;
     }
@@ -235,10 +229,6 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.modal.open {
-  opacity: 1;
-  visibility: visible;
-}
 
 /* Estilos del contenido del modal */
 .modal-content {
@@ -396,7 +386,7 @@
 }
 
 /* Estilo responsivo para dispositivos pequeños */
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   .modal {
     width: 95%;
     max-width: none;
@@ -580,7 +570,7 @@
 }
 
 /* Estilo para pantallas grandes */
-@media (min-width: 768px) {
+@media (min-width: 168px) {
   .chat-container {
     width: 100%;
     max-width: 600px;
