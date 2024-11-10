@@ -67,7 +67,7 @@ export class UserViewComponent {
           if (this.selectedProject) {
             this.loadMessages();
           }
-        }, 4500);
+        }, 5000);
       } else {
         console.log('No hay un usuario autenticado');
       }
@@ -245,7 +245,7 @@ export class UserViewComponent {
   if (this.token) {
     this.chatService.getMessages(this.selectedProject.id, this.token).subscribe(
       messages => {
-        console.log('Mensajes recibidos del backend:', messages);  // Log para verificar la respuesta de la API
+      //console.log('Mensajes recibidos del backend:', messages);  // Log para verificar la respuesta de la API
         this.chatMessages = messages;
       },
       error => console.error('Error al cargar mensajes:', error)

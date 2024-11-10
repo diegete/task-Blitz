@@ -37,25 +37,8 @@
       <p>No hay tareas asignadas para este proyecto o no ha seleccionado ningún proyecto.</p>
     </ng-template>
   </div>
+  <button class="chat-open-button" (click)="openChat()">Chat</button>
 </div>
-@if (selectedProject) {
-  <div >
-    <div class="chat-container">
-      <h3>Chat del Proyecto</h3>
-      <div class="chat-messages">
-        <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
-          <strong>{{ msg.user }}:</strong> {{ msg.content }}
-        </div>
-      </div>
-      <div class="chat-input-container">
-        <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
-        <button (click)="sendMessage()">Enviar</button>
-      </div>
-    </div>
-  </div>
-}
-
-
 
 
 
@@ -63,6 +46,22 @@
   <p>No hay datos de usuario.</p>
 } 
 
+<div class="modal-2" [class.open]="isChatOpen === true && selectedProject">
+  <div class="chat-container">
+    
+    <h3>Chat del Proyecto</h3>
+    <div class="chat-messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
+        <strong>{{ msg.user }}:</strong> {{ msg.content }}
+      </div>
+    </div>
+    <div class="chat-input-container">
+      <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
+      <button (click)="sendMessage()">Enviar</button>
+      <button class="close-button" (click)="closeChat()">Cerrar</button>
+    </div>
+  </div>
+</div>
 
   <!-- Modal para los detalles de la tarea -->
   <div class="modal" [class.open]="isModalOpen">
