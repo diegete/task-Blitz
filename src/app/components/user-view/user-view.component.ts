@@ -59,15 +59,11 @@ export class UserViewComponent {
           this.userData.profile.image = img
 
           this.loadPendingInvitations();
-          this.openChat();
+          
         });
   
         // Configurar el intervalo para actualizar los mensajes del chat cada 2 segundos
-        this.chatRefreshInterval = setInterval(() => {
-          if (this.selectedProject) {
-            this.loadMessages();
-          }
-        }, 5000);
+       
       } else {
         console.log('No hay un usuario autenticado');
       }
@@ -100,7 +96,12 @@ export class UserViewComponent {
           tasks => {
             this.selectedProjectTasks = tasks;
             this.chatMessages = []; // Limpiar el chat
-            this.loadMessages(); // Cargar mensajes del proyecto seleccionado
+             // Cargar mensajes del proyecto seleccionado
+             this.chatRefreshInterval = setInterval(() => {
+              if (this.selectedProject) {
+                this.loadMessages();
+              }
+            }, 5000);
           },
           error => {
             console.error('Error al obtener las tareas asignadas', error);
@@ -172,12 +173,18 @@ export class UserViewComponent {
     this.isTaskModalOpen = false;
     this.selectedTask = null;
   }
+  openChat(): void{
+    if (this.selectedProject) {
+      this.isChatOpen = true;
+      this.loadMessages();
+    } else {
+      alert("Selecciona un proyecto primero.");
+    }
+  }
   closeChat(): void{
     this.isChatOpen = false;
   }
-  openChat(): void{
-    this.isChatOpen = true;
-  }
+
 
   showTaskDetail(tarea: any) {
     this.selectedTask = tarea;

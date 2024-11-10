@@ -1,3 +1,6 @@
+<head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=chat" />
+</head>
 
 @if (userData && userData.profile.user_type == 'empleado') { <div class="container">
   <!-- Rectángulo de proyectos -->
@@ -37,31 +40,37 @@
       <p>No hay tareas asignadas para este proyecto o no ha seleccionado ningún proyecto.</p>
     </ng-template>
   </div>
-  <button class="chat-open-button" (click)="openChat()">Chat</button>
+  <button class="chat-open-button" (click)="openChat()"><span class="material-symbols-outlined">
+    chat
+    </span></button>
+  
 </div>
-
 
 
 }@else {
   <p>No hay datos de usuario.</p>
 } 
 
-<div class="modal-2" [class.open]="isChatOpen === true && selectedProject">
-  <div class="chat-container">
-    
-    <h3>Chat del Proyecto</h3>
-    <div class="chat-messages">
-      <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
-        <strong>{{ msg.user }}:</strong> {{ msg.content }}
+  <div class="modal-2" *ngIf="isChatOpen ==true && selectedProject" >
+    <div class="chat-container"  >
+      
+      <h3>Chat del Proyecto: {{selectedProject.title}}</h3>
+      <div class="chat-messages">
+        <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
+          <strong>{{ msg.user }}:</strong> {{ msg.content }}
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
+        <button (click)="sendMessage()">Enviar</button>
+        <button class="close-button" (click)="closeChat()">Cerrar</button>
       </div>
     </div>
-    <div class="chat-input-container">
-      <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
-      <button (click)="sendMessage()">Enviar</button>
-      <button class="close-button" (click)="closeChat()">Cerrar</button>
-    </div>
   </div>
-</div>
+
+
+
+
 
   <!-- Modal para los detalles de la tarea -->
   <div class="modal" [class.open]="isModalOpen">

@@ -73,19 +73,6 @@
   }
   
   /* Estilos del modal */
-  .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
   .modal.open {
     opacity: 1;
     visibility: visible;
@@ -209,26 +196,23 @@
     top: -5px;
   }
   
-/* Estilos del modal (ajustado para centrar y mejorar visualización) */
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 500px;
-  height: auto; /* Ajustar altura automáticamente según el contenido */
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  visibility: hidden;
-  z-index: 999;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 600px; /* Más ancho */
+    height: auto;
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 999;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
 
 /* Estilos del contenido del modal */
 .modal-content {
@@ -282,23 +266,7 @@
   background-color: #c82333;
 }
 /* Contenedor principal del modal */
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 600px; /* Más ancho */
-  height: auto;
-  background-color: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  visibility: hidden;
-  z-index: 999;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
+
 
 /* Mostrar el modal cuando esté abierto */
 .modal.open {
@@ -329,22 +297,6 @@
   margin-bottom: 15px;
 }
 
-/* Estilo del selector de avance */
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  background-color: #fff;
-  font-size: 1em;
-  transition: border-color 0.3s ease;
-  cursor: pointer;
-  appearance: none; /* Ocultar flecha predeterminada */
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23999" d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
-}
 
 /* Efecto al enfocar el selector */
 .modal-content select:focus {
@@ -585,15 +537,18 @@
   }
   .modal-2 {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    max-width: 100%;
-    height: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
+    display: flex;
+    flex-direction: column;
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 500px; /* Limita el ancho máximo */
 }
 
 .modal-2.open {
@@ -653,7 +608,7 @@
 }
 
 /* Responsividad */
-@media (max-width: 768px) {
+@media (max-width: 1064px) {
     .container {
         flex-direction: column;
         gap: 10px;
@@ -832,6 +787,34 @@
 .open-chat-button:hover {
   background-color: #0056b3; /* Color más oscuro al pasar el ratón */
 }
+.chat-open-button {
+  background-color: #007bff; /* Color de fondo */
+  color: white; /* Color del icono */
+  border: none;
+  border-radius: 50%;
+  
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  transition: transform 0.2s ease;
+}
+
+.chat-open-button:hover {
+  transform: scale(1.1); /* Agranda el botón ligeramente al pasar el ratón */
+}
+
+.chat-open-button:active {
+  transform: scale(1); /* Restaura el tamaño al hacer clic */
+}
+
+.material-symbols-outlined {
+  font-size: 24px; /* Tamaño del icono */
+}
+
 
 }
 

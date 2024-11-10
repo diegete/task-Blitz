@@ -354,7 +354,7 @@ button[type="button"]:hover {
 }
 
 
-.invite-button {
+/* .invite-button {
   margin-top: 15px;
   padding: 10px 20px;
   background-color: #007bff;
@@ -367,7 +367,7 @@ button[type="button"]:hover {
 
 .invite-button:hover {
   background-color: #0056b3;
-}
+} */
 .no-projects-container {
   position: absolute;
   top: 20px;
