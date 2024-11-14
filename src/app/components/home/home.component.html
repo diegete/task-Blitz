@@ -115,7 +115,18 @@
   <div><h2>No Existe ningún usuario con sessión activo</h2>
   </div>
 }
+<div *ngIf="selectedProject">
+  <h2>{{ selectedProject.title }}</h2>
 
+  <!-- Mostrar métricas del proyecto -->
+  <div *ngIf="selectedProject.metrics">
+    <p>Total de tareas: {{ selectedProject.metrics.total_tasks }}</p>
+    <p>Tareas completadas: {{ selectedProject.metrics.completed_tasks }}</p>
+    <p>Progreso: {{ selectedProject.metrics.progress }}%</p>
+  </div>
+
+  <!-- Otras secciones para miembros, tareas, etc. -->
+</div>
 
 <ng-template #noProyectos>
   <p >No tienes proyectos disponibles.</p>

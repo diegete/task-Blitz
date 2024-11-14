@@ -34,7 +34,7 @@ export class HomeComponent {
   isAssignTaskModalOpen = false;
   isTaskModalUpdateOpen = false;
   showTaskForm: boolean = false;
-  
+  metrics: any = null;
   selectedUser: any = null;
   isConfirmModalOpen = false;
 
@@ -159,27 +159,34 @@ export class HomeComponent {
   }
   
   // fixed ahora funciona como deberia 
-  selectProject(proyecto: any): void {
-    this.selectedProject = proyecto;
-    this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
-    // Restablecer la tarea seleccionada al cambiar de proyecto 
-    this.assignTaskForm.reset();  // Restablece el formulario de asignación de tareas
-    this.selectedUser = null;  // Desmarca cualquier usuario seleccionado
+  // En el componente
+selectProject(proyecto: any): void {
+  this.selectedProject = proyecto;
+  this.selectedProjectTasks = this.userData.tareas.filter((tarea: any) => tarea.proyecto === proyecto.id);
+  
+  // Restablece las selecciones y el formulario
+  this.assignTaskForm.reset();
+  this.selectedUser = null;
 
-    const token = localStorage.getItem('token');
-    //console.log(proyecto.members); // Verifica la estructura completa de los miembros
+  const token = localStorage.getItem('token');
+  const memberIds = proyecto.members.map((member: any) => member.id);
 
-    // Ahora que el ID está incluido, se puede acceder directamente
-    const memberIds = proyecto.members.map((member: any) => member.id); 
-    //console.log(memberIds); // Verifica los id obtenidos
+  // Obtener detalles de miembros
+  if (token && memberIds.length > 0) {
+    this.taskService.getMembersDetails(memberIds, token).subscribe(response => {
+      this.selectedProject.members = response;
+    });
+  }
 
-    if (token && memberIds.length > 0) {
-      this.taskService.getMembersDetails(memberIds, token).subscribe(response => {
-        // Actualizamos los miembros con la información recibida del backend
-        this.selectedProject.members = response;
-      });
-    }
+  // Obtener métricas del proyecto
+  if (token) {
+    this.proyectService.getProjectMetrics(proyecto.id, token).subscribe(metrics => {
+      this.selectedProject.metrics = metrics; // Guardar métricas en el proyecto seleccionado
+      console.log(metrics)
+    });
+  }
 }
+
   
   
   
