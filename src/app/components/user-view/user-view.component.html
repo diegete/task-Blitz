@@ -8,12 +8,15 @@
     <div class="welcome-container">
       <div class="profile-info">
         <img class="img-perfil"
-          [src]="userData.profile.image || 'localhost:8000/media/imagen/imagen/por/defecto.jpg'"
-          alt="Imagen de perfil"
-          class="profile-image"
-          (click)="openImageModal()"
-        />
+     [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
+     alt="Imagen de perfil"
+     class="profile-image"
+     (click)="openImageModal()" />
         <span>Bienvenido, {{ userData.username }}</span>
+        <div class="invitation-button">
+          <button (click)="toggleInvitations()">📨 Invitaciones ({{ pendingInvitations.length }})</button>
+        </div>
+        
       </div>
     </div>
     

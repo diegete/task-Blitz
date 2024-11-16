@@ -32,6 +32,8 @@ export class UserViewComponent {
   showInvitations: boolean = false;
   taskUpdateForm: FormGroup;
   //CHAT
+  pimg: any;
+  pimgd: any;
   chatMessages: any[] = [];
   newMessage: string = '';
   private chatRefreshInterval: any;
@@ -56,7 +58,10 @@ export class UserViewComponent {
           this.userData = data;
           let img;
           img = BACKEND_URL+this.userData.profile.image;
+          this.pimg = img
+          this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
           this.userData.profile.image = img
+          console.log(this.pimg, this.pimgd)
 
           this.loadPendingInvitations();
           

@@ -182,7 +182,7 @@ selectProject(proyecto: any): void {
   if (token) {
     this.proyectService.getProjectMetrics(proyecto.id, token).subscribe(metrics => {
       this.selectedProject.metrics = metrics; // Guardar métricas en el proyecto seleccionado
-      console.log(metrics)
+      //console.log(metrics)
     });
   }
 }
@@ -200,6 +200,11 @@ selectProject(proyecto: any): void {
       if (token) {
         this.proyectService.createProyect(this.proyect, token).subscribe(response => {
           alert('se ha creado el proyecto');
+          this.userService.getUserData().subscribe(data => {
+            this.userData = data;
+            this.ordenarProyectosPorPrioridad()
+            this.get_task();
+          });
           this.closeProjectModal();
         });
       }
