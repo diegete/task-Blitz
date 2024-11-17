@@ -37,7 +37,7 @@ export class HomeComponent {
   metrics: any = null;
   selectedUser: any = null;
   isConfirmModalOpen = false;
-
+  private proyectrefreshInterval: any;
   invitationForm: FormGroup;
   availableEmployees: any[] = [];
   isInvitationModalOpen = false;
@@ -100,6 +100,14 @@ export class HomeComponent {
       console.log('No hay un usuario autenticado');
     }
     
+    this.proyectrefreshInterval = setInterval(() => {
+      console.log('estan cargando')
+      this.userService.getUserData().subscribe(data => {
+        this.userData = data;
+        this.ordenarProyectosPorPrioridad()
+        this.get_task();
+      });
+    }, 5000);
   }
   // modal configs
   // Método para seleccionar/deseleccionar un usuario

@@ -5,6 +5,7 @@ import { LoginService } from '../../services/login.service';
 import { CreateTasksService } from '../../services/create-tasks.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class UserViewComponent {
   chatMessages: any[] = [];
   newMessage: string = '';
   private chatRefreshInterval: any;
+  private invitationfreshInterval: any;
   isChatOpen = false;
 
   constructor(
@@ -44,7 +46,8 @@ export class UserViewComponent {
     private userService: UserdataService, 
     private loginService: LoginService, 
     private createTask: CreateTasksService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router:Router
     ) {
       this.taskUpdateForm = this.formBuilder.group({
         avance: ['', Validators.required],
@@ -61,9 +64,14 @@ export class UserViewComponent {
           this.pimg = img
           this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
           this.userData.profile.image = img
-          console.log(this.pimg, this.pimgd)
-
+          //console.log(this.pimg, this.pimgd)
           this.loadPendingInvitations();
+          
+          this.invitationfreshInterval = setInterval(() => {
+            console.log('estan cargando')
+            this.loadPendingInvitations();
+          }, 5000);
+          
           
         });
   
@@ -105,6 +113,7 @@ export class UserViewComponent {
              this.chatRefreshInterval = setInterval(() => {
               if (this.selectedProject) {
                 this.loadMessages();
+                this.loadPendingInvitations()
               }
             }, 5000);
           },
@@ -205,7 +214,7 @@ export class UserViewComponent {
   }
 
   openImageModal(): void {
-    console.log('Modal abierto');
+    //console.log('Modal abierto');
     this.showImageModal = true;
   }
   
@@ -241,7 +250,7 @@ export class UserViewComponent {
     this.userService.updateTaskProgress(this.selectedTask.tarea.id, avanceData, token).subscribe(
       (response) => {
         alert('Estado de avance actualizado con éxito');
-        console.log('Respuesta del servidor:', response);
+        //console.log('Respuesta del servidor:', response);
         
         this.closeTaskModal();
       },
@@ -289,20 +298,24 @@ updateProfile(): void {
   const formData = new FormData();
   if (this.selectedImage) {
     formData.append('image', this.selectedImage);
+    
   }
 
   if (this.token) {
     this.userService.updateProfile(formData, this.token).subscribe(
       response => {
-        console.log('Perfil actualizado con éxito', response);
+        //console.log('Perfil actualizado con éxito', response);
         alert('Perfil actualizado con éxito')
         this.userService.getUserData().subscribe(data => {
           this.userData = data;
           let BACKEND_URL = 'http://localhost:8000';
-          this.userData = data;
+          this.userData = data; 
           let img;
           img = BACKEND_URL+this.userData.profile.image;
+          this.pimg = img
+          this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
           this.userData.profile.image = img
+          
         })
         // Aquí puedes actualizar `profileData` o mostrar un mensaje de éxito
       },
@@ -315,7 +328,11 @@ updateProfile(): void {
   }
 }
 
-
+logOut(){
+  this.loginService.logout()
+  alert('Ha cerrardo su sesión')
+  this.router.navigate(['/login'])
+}
 
   
 }

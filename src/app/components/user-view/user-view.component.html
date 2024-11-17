@@ -51,7 +51,7 @@
 
 
 }@else {
-  <p>No hay datos de usuario.</p>
+  <p>No ha iniciado sesión.</p>
 } 
 
   <div class="modal-2" *ngIf="isChatOpen ==true && selectedProject" >
@@ -130,7 +130,8 @@
       <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
       <input class="form-control" type="file" (change)="onImageSelected($event)" />
       <button (click)="updateProfile()">Actualizar Imagen </button>
-      <button class="alter" (click)="closeImageModal()"> Cerrar</button>
+      <button class="alter" (click)="logOut()">Cerrar sesión</button>
+      <button class="alter" (click)="closeImageModal()"> Cerrar</button> 
     </div>
   </div>
   
