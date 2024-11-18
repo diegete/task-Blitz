@@ -66,7 +66,7 @@ export class UserViewComponent {
           this.userData.profile.image = img
           //console.log(this.pimg, this.pimgd)
           this.loadPendingInvitations();
-          
+
           this.invitationfreshInterval = setInterval(() => {
             console.log('estan cargando')
             this.loadPendingInvitations();
@@ -334,7 +334,9 @@ logOut(){
   this.router.navigate(['/login'])
 }
 
-  
+goLogin(){
+  this.router.navigate(['/login'])
+}  
 }
 
 

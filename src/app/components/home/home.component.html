@@ -6,8 +6,15 @@
   <div class="container">
     <!-- Primer rectángulo: Proyectos y Prioridades -->
     <div class="rectangulo-izquierda">
-      <h2>Bienvenido: {{ userData?.username }}</h2>
-  
+        <div class="welcome-container">
+          <img class="img-perfil"
+      [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
+      alt="Imagen de perfil"
+      class="profile-image"
+      (click)="openImageModal()" />
+        <h2>Bienvenido: {{ userData?.username }}</h2>
+        
+    </div>
       <h3>Proyectos:</h3>
       <ul>
         <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
@@ -111,32 +118,34 @@
       </div>
     </div>
   </div>
+  <div *ngIf="selectedProject">
+    <h2>{{ selectedProject.title }}</h2>
+  
+    <!-- Mostrar métricas del proyecto -->
+    <div *ngIf="selectedProject.metrics">
+      <p>Total de tareas: {{ selectedProject.metrics.total_tasks }}</p>
+      <p>Tareas completadas: {{ selectedProject.metrics.completed_tasks }}</p>
+      <p>Progreso: {{ selectedProject.metrics.progress }}%</p>
+    </div>
+  
+    <!-- Otras secciones para miembros, tareas, etc. -->
+  </div>
+  
+  <ng-template #noProyectos>
+    <p >No tienes proyectos disponibles.</p>
+  </ng-template>
+  <div *ngIf="selectedProject">
+    <button class="invite-button" (click)="openInvitationModal()"><span class="material-symbols-outlined">
+      person_add 
+      <!-- esto no se cambia a texto si no se bugea todo -->
+      </span></button>
+  </div>
 }@else {
   <div><h2>No Existe ningún usuario con sessión activo</h2>
+    <button (click)="goLogin()">ir a iniciar de sesión</button>
   </div>
 }
-<div *ngIf="selectedProject">
-  <h2>{{ selectedProject.title }}</h2>
 
-  <!-- Mostrar métricas del proyecto -->
-  <div *ngIf="selectedProject.metrics">
-    <p>Total de tareas: {{ selectedProject.metrics.total_tasks }}</p>
-    <p>Tareas completadas: {{ selectedProject.metrics.completed_tasks }}</p>
-    <p>Progreso: {{ selectedProject.metrics.progress }}%</p>
-  </div>
-
-  <!-- Otras secciones para miembros, tareas, etc. -->
-</div>
-
-<ng-template #noProyectos>
-  <p >No tienes proyectos disponibles.</p>
-</ng-template>
-<div *ngIf="selectedProject">
-  <button class="invite-button" (click)="openInvitationModal()"><span class="material-symbols-outlined">
-    person_add 
-    <!-- esto no se cambia a texto si no se bugea todo -->
-    </span></button>
-</div>
 
 <!-- Modal para enviar invitaciones -->
 <div *ngIf="isInvitationModalOpen" class="modal">
@@ -161,7 +170,7 @@
     <button (click)="closeConfirmModal()">Cancelar</button>
   </div>
 </div>
-
+<!-- modal de confirmación de tarea -->
 <div class="modal" *ngIf="isTaskModalUpdateOpen" class="modal">
   @if(tareaup){
     <div class="modal-content">
@@ -201,5 +210,16 @@
       </div>
     </div>    
   }
-
+<!-- modal actualizar imagen -->
+</div>
+<div class="modal-backdrop" *ngIf="showImageModal">
+  <div class="modal-content">
+    <span class="close-button" (click)="closeImageModal()"></span>
+    <h2>Actualizar Imagen de Perfil</h2>
+    <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
+    <input class="form-control" type="file" (change)="onImageSelected($event)" />
+    <button (click)="updateProfile()">Actualizar Imagen </button>
+    <button class="alter" (click)="logOut()">Cerrar sesión</button>
+    <button class="alter" (click)="closeImageModal()"> Cerrar</button> 
+  </div>
 </div>

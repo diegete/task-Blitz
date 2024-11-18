@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { CreateTasksService } from '../../services/create-tasks.service';
 import { CommonModule } from '@angular/common';
 import { CreateProyectService } from '../../services/create-proyect.service';
+import { Router } from '@angular/router';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-home',
@@ -41,14 +43,19 @@ export class HomeComponent {
   invitationForm: FormGroup;
   availableEmployees: any[] = [];
   isInvitationModalOpen = false;
-
-
+  pimg: any;
+  pimgd: any;
+  showImageModal = false;
+  selectedImage: File | null = null;
+  token: string | null = null; 
   // fin varialbes 
   constructor(
     private userService: UserdataService,
     private taskService: CreateTasksService,
     private proyectService: CreateProyectService,
     private formBuilder: FormBuilder,
+    private router: Router,
+    private loginService: LoginService
   ) {
     // Inicializar el formulario de creación de tareas
     this.taskForm = this.formBuilder.group({
@@ -94,6 +101,13 @@ export class HomeComponent {
         this.userData = data;
         this.ordenarProyectosPorPrioridad()
         this.get_task();
+        let BACKEND_URL = 'http://localhost:8000';
+        this.userData = data;
+        let img;
+        img = BACKEND_URL+this.userData.profile.image;
+        this.pimg = img
+        this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
+        this.userData.profile.image = img
       });
     } else {
       alert('No ha iniciado sesión')
@@ -165,7 +179,24 @@ export class HomeComponent {
     // Calcula el porcentaje de carga con base en un máximo de 10.
     return (cargaTrabajo / 10) * 100;
   }
+  openImageModal(): void {
+    //console.log('Modal abierto');
+    this.showImageModal = true;
+  }
   
+  closeImageModal(): void {
+    this.showImageModal = false;
+  }
+  
+  logOut(){
+    this.loginService.logout();
+    alert('Ha cerrado sesión')
+    this.router.navigate(['/login'])
+  }
+
+  onImageSelected(event: any): void {
+    this.selectedImage = event.target.files[0];
+  }
   // fixed ahora funciona como deberia 
   // En el componente
 selectProject(proyecto: any): void {
@@ -444,5 +475,42 @@ assignTask(): void {
       }
     );
   }
-  
+  updateProfile(): void {
+    const formData = new FormData();
+    if (this.selectedImage) {
+      formData.append('image', this.selectedImage);
+      
+    }
+    this.token = localStorage.getItem('token')
+    if (this.token) {
+      
+      this.userService.updateProfile(formData, this.token).subscribe(
+        response => {
+          //console.log('Perfil actualizado con éxito', response);
+          alert('Perfil actualizado con éxito')
+          this.userService.getUserData().subscribe(data => {
+            this.userData = data;
+            let BACKEND_URL = 'http://localhost:8000';
+            this.userData = data; 
+            let img;
+            img = BACKEND_URL+this.userData.profile.image;
+            this.pimg = img
+            this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
+            this.userData.profile.image = img
+            console.log('algo')
+          })
+          // Aquí puedes actualizar `profileData` o mostrar un mensaje de éxito
+        },
+        error => {
+          console.error('Error al actualizar el perfil', error);
+        }
+      );
+    } else {
+      console.error('Token no disponible. El usuario no está autenticado.');
+    }
+  }
+
+  goLogin(){
+    this.router.navigate(['/login'])
+  }
 }
