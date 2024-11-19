@@ -251,7 +251,7 @@ export class UserViewComponent {
       (response) => {
         alert('Estado de avance actualizado con éxito');
         //console.log('Respuesta del servidor:', response);
-        
+        console.log(this.selectedTask)
         this.closeTaskModal();
       },
       (error) => {

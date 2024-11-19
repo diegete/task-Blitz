@@ -221,7 +221,7 @@ selectProject(proyecto: any): void {
   if (token) {
     this.proyectService.getProjectMetrics(proyecto.id, token).subscribe(metrics => {
       this.selectedProject.metrics = metrics; // Guardar métricas en el proyecto seleccionado
-      //console.log(metrics)
+      console.log(metrics)
     });
   }
 }
@@ -512,5 +512,8 @@ assignTask(): void {
 
   goLogin(){
     this.router.navigate(['/login'])
+  }
+  getCircularProgress(progress: number): string {
+    return `conic-gradient(#4caf50 0% ${progress}%, #e0e0e0 ${progress}% 100%)`;
   }
 }
