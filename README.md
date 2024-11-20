@@ -39,5 +39,8 @@ npm update
 
 npm install jspdf jspdf-autotable
 
+npm fund
+
+npm audit fix
 
 
