@@ -26,8 +26,15 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
+## Es necesario tener angular
+npm install -g @angular/cli
+
 ## librerias a instalar
 
 npm install jwt-decode
+npm install xlsx file-saver
+npm update
+npm install jspdf jspdf-autotable
+
 
 
