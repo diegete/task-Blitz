@@ -143,6 +143,11 @@
           <span class="completed">Completadas: {{ selectedProject.metrics.completed_tasks }}</span>
         </div>
       </div>
+      <div>
+        <button class="export-button" (click)="exportToExcel()">Exportar a Excel</button>
+        <button class="export-button" (click)="exportToPDF()">Exportar a PDF</button>
+      </div>
+
     </div>
     
     

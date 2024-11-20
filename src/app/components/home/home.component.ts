@@ -6,6 +6,10 @@ import { CommonModule } from '@angular/common';
 import { CreateProyectService } from '../../services/create-proyect.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 
 @Component({
   selector: 'app-home',
@@ -515,5 +519,51 @@ assignTask(): void {
   }
   getCircularProgress(progress: number): string {
     return `conic-gradient(#4caf50 0% ${progress}%, #e0e0e0 ${progress}% 100%)`;
+  }
+
+  exportToExcel() {
+    const metrics = this.selectedProject.metrics;
+  
+    // Datos a exportar
+    const data = [
+      { Métrica: 'Total de Tareas', Valor: metrics.total_tasks },
+      { Métrica: 'Tareas Completadas', Valor: metrics.completed_tasks },
+      { Métrica: 'Tareas en Progreso', Valor: metrics.inprogress_tasks },
+      { Métrica: 'Progreso (%)', Valor: metrics.progress },
+    ];
+  
+    // Crear hoja de Excel
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Métricas');
+  
+    // Exportar archivo
+    XLSX.writeFile(workbook, `metricas_proyecto_${this.selectedProject.title}.xlsx`);
+  }
+  
+  exportToPDF() {
+    const doc = new jsPDF();
+    const metrics = this.selectedProject.metrics;
+  
+    // Título
+    doc.text('Métricas del Proyecto', 14, 20);
+  
+    // Datos para la tabla
+    const tableData = [
+      ['Total de Tareas', metrics.total_tasks],
+      ['Tareas en Progreso', metrics.inprogress_tasks],
+      ['Tareas Completadas', metrics.completed_tasks],
+      ['Progreso (%)', `${metrics.progress}%`],
+    ];
+  
+    // Agregar tabla con autoTable
+    (doc as any).autoTable({
+      head: [['Métrica', 'Valor']],
+      body: tableData,
+      startY: 30, // Posición inicial en Y
+    });
+  
+    // Guardar el PDF
+    doc.save(`metricas_proyecto_${this.selectedProject.title}.pdf`);
   }
 }

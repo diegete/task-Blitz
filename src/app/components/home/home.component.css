@@ -525,4 +525,9 @@ button[type="button"]:hover {
   font-size: 0.9em;
   margin-top: 10px;
 }
-
+.export-button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
