@@ -32,8 +32,11 @@ npm install -g @angular/cli
 ## librerias a instalar
 
 npm install jwt-decode
+
 npm install xlsx file-saver
+
 npm update
+
 npm install jspdf jspdf-autotable
 
 
