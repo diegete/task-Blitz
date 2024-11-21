@@ -127,8 +127,8 @@
       <div class="progress-section">
         <p><strong>Progreso General:</strong></p>
         <div class="progress-circle-container">
-          <div class="progress-circle" [style.background]="getCircularProgress(selectedProject.metrics.progress)">
-            <span>{{ selectedProject.metrics.progress }}%</span>
+          <div class="progress-circle" [style.background]="getCircularProgress(selectedProject?.metrics?.progress)">
+            <span>{{ selectedProject?.metrics?.progress }}%</span>
           </div>
         </div>
       </div>
@@ -138,9 +138,9 @@
         <p><strong>Desglose de Tareas:</strong></p>
        
         <div class="legend">
-          <span class="pending">Total de tareas: {{ selectedProject.metrics.total_tasks }}</span>
-          <span class="in-progress">En Progreso: {{ selectedProject.metrics.inprogres_taks }}</span>
-          <span class="completed">Completadas: {{ selectedProject.metrics.completed_tasks }}</span>
+          <span class="pending">Total de tareas: {{ selectedProject?.metrics?.total_tasks }}</span>
+          <span class="in-progress">En Progreso: {{ selectedProject?.metrics?.inprogres_taks }}</span>
+          <span class="completed">Completadas: {{ selectedProject?.metrics?.completed_tasks }}</span>
         </div>
       </div>
       <div>
