@@ -98,7 +98,9 @@ export class LoginComponent {
 
     
   }
-
+  forgot(){
+    this.router.navigate(['/auth/password-reset']);
+  }
 
   resetForm() {
     this.userData = {
