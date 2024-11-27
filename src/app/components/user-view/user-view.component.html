@@ -16,7 +16,15 @@
         <div class="invitation-button">
           <button (click)="toggleInvitations()">📨 Invitaciones ({{ pendingInvitations.length }})</button>
         </div>
-        
+        <div class="notification-div">
+          <button class="notification-button-icon" (click)="loadNotifications()">📨</button>
+          <ul class="notification-list">
+            <li class="notification-item" *ngFor="let notification of notifications">
+              <span class="notification-message">{{ notification.message }}</span>
+              <button class="notification-button" (click)="markAsRead(notification.id)">Aceptar</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     
@@ -46,8 +54,8 @@
   <button class="chat-open-button" (click)="openChat()"><span class="material-symbols-outlined">
     chat
     </span></button>
-  
-</div>
+   
+  </div>
 
 
 }@else {

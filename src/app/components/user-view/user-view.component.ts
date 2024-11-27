@@ -6,6 +6,7 @@ import { CreateTasksService } from '../../services/create-tasks.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { Router } from '@angular/router';
+import { CsrfService } from '../../services/csrf.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class UserViewComponent {
   private chatRefreshInterval: any;
   private invitationfreshInterval: any;
   isChatOpen = false;
+  notifications: any[] = [];
 
   constructor(
     private chatService: ChatService,
@@ -47,7 +49,8 @@ export class UserViewComponent {
     private loginService: LoginService, 
     private createTask: CreateTasksService,
     private formBuilder: FormBuilder,
-    private router:Router
+    private router:Router,
+    private notificationService: CsrfService,
     ) {
       this.taskUpdateForm = this.formBuilder.group({
         avance: ['', Validators.required],
@@ -66,10 +69,11 @@ export class UserViewComponent {
           this.userData.profile.image = img
           //console.log(this.pimg, this.pimgd)
           this.loadPendingInvitations();
-
+          this.loadNotifications();
           this.invitationfreshInterval = setInterval(() => {
             console.log('estan cargando')
             this.loadPendingInvitations();
+            
           }, 5000);
           
           
@@ -336,7 +340,31 @@ logOut(){
 
 goLogin(){
   this.router.navigate(['/login'])
-}  
+}
+
+loadNotifications(): void {
+  if(this.token){
+    this.notificationService.getNotifications(this.token).subscribe((data) => {
+      this.notifications = data;
+    });
+  }else{
+    console.log('No hay token')
+  }
+
+}
+
+markAsRead(notificationId: number): void {
+  if(this.token){
+    this.notificationService.markAsRead(notificationId,this.token).subscribe(() => {
+      this.notifications = this.notifications.filter(
+        (n) => n.id !== notificationId
+      );
+    });
+  }else{
+    alert('No tienes permiso para realizar esta acción')
+  }
+  
+}
 }
 
 
