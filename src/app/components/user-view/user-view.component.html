@@ -42,8 +42,8 @@
   <!-- Rectángulo de tareas -->
   <div class="rectangulo-derecha">
     <h3>Tareas del proyecto seleccionado:</h3>
-    <ul *ngIf="selectedProjectTasks.length > 0; else noTareas">
-      <li *ngFor="let tarea of selectedProjectTasks" (click)="showTaskDetail(tarea)">
+    <ul *ngIf="nonCompletedTasks.length > 0; else noTareas">
+      <li *ngFor="let tarea of nonCompletedTasks" (click)="showTaskDetail(tarea)">
         {{ tarea.tarea.titulo }} <!-- Mostrar el título de la tarea -->
       </li>
     </ul>

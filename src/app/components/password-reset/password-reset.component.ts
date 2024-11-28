@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CsrfService } from '../../services/csrf.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-password-reset',
@@ -14,7 +15,7 @@ import { CsrfService } from '../../services/csrf.service';
 export class PasswordResetComponent {
   email: string = '';
 
-  constructor(private csrfService: CsrfService) {}
+  constructor(private csrfService: CsrfService,private router:Router) {}
 
   onSubmit() {
     const resetUrl = 'http://localhost:8000/api/password/reset/';
@@ -31,5 +32,8 @@ export class PasswordResetComponent {
       }
     );
   }
-  
+  volver(){
+    this.router.navigate(['/login'])
+  }
+
 }

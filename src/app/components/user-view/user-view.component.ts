@@ -365,6 +365,9 @@ markAsRead(notificationId: number): void {
   }
   
 }
+get nonCompletedTasks() {
+  return this.selectedProjectTasks?.filter(tarea => tarea.tarea.estado === false) || [];
+}
 }
 
 

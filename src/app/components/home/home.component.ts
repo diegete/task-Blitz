@@ -262,10 +262,10 @@ createTask(): void {
     carga: this.taskForm.value.carga,  // El valor numérico 5, 3 o 1
     proyecto: this.selectedProject.id,
     fechaInicio: this.taskForm.value.fechaIncio,
-    fechamax: this.taskForm.value.fechaMax
+    fechaMax: this.taskForm.value.fechaMax
   };
   
-  if (token) {
+  if (token && this.taskForm.value.fechaIncio != null && this.taskForm.value.fechaMax) {
     this.taskService.createTask(taskData, token).subscribe((response: any) => {
       // Añadir la nueva tarea al array local de tareas
       const nuevaTarea = {
@@ -283,6 +283,8 @@ createTask(): void {
       this.closeTaskModal();
       alert('Se ha creado la tarea con éxito');
     });
+  }else{
+    alert('Por favor, complete todos los campos y seleccione una fecha de inicio y fin');
   }
 }
 

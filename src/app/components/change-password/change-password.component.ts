@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-password',
@@ -16,7 +16,7 @@ export class ChangePasswordComponent {
   confirmPassword: string = '';
   token: string = '';
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private route: ActivatedRoute, private http: HttpClient,private router: Router) {
     this.token = this.route.snapshot.paramMap.get('token') || '';
   }
   onSubmit() {
@@ -33,6 +33,10 @@ export class ChangePasswordComponent {
       (response) => alert('Contraseña cambiada exitosamente.'),
       (error) => alert('Error al cambiar la contraseña.')
     );
+  }
+
+  volver(){
+    this.router.navigate(['/login'])
   }
   
 }
