@@ -36,7 +36,6 @@
   
   /* Rectángulos */
   .rectangulo-izquierda,
-  .rectangulo-centro,
   .rectangulo-derecha {
     border: 1px solid #dee2e6;
     padding: 20px;
@@ -44,13 +43,12 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     flex: 1;
-    min-width: 250px;
+    min-width: 390px;
   }
   
   .rectangulo-izquierda h2,
-  .rectangulo-centro h3,
   .rectangulo-derecha h3 {
-    font-size: 1.5em;
+    font-size: 2em;
     color: #495057;
   }
   
@@ -75,36 +73,19 @@
   }
   
   /* Estilos del modal */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  
   .modal.open {
     opacity: 1;
     visibility: visible;
   }
   
   .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
-    transform: scale(0.8);
-    transition: transform 0.3s ease;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 450px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
   }
   
   .modal-content.open {
@@ -146,7 +127,6 @@
     }
   
     .rectangulo-izquierda,
-    .rectangulo-centro,
     .rectangulo-derecha {
       width: 100%;
     }
@@ -161,7 +141,7 @@
   
     /* Hacer que el modal ocupe más espacio en pantallas pequeñas */
     .modal-content {
-      width: 95%;
+      width: 85%;
       max-width: none;
       padding: 15px;
     }
@@ -193,4 +173,736 @@
   .modal-content button:hover {
     background-color: #0056b3;
   }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
   
+  .rectangulo-izquierda {
+    width: 45%;
+  }
+  
+  .rectangulo-derecha {
+    width: 45%;
+  }
+  
+  .invitation-button {
+    display: inline-block;
+    margin-left: 7px;
+    width: 80x;
+    height: 10  0px;
+    position: relative;
+    top: -5px;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 600px; /* Más ancho */
+    height: auto;
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 999;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+/* Estilos del contenido del modal */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.modal-content p {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1em;
+  margin-top: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.modal-content button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+/* Botones para aceptar/rechazar */
+.modal-content button.accept {
+  background-color: #007bff;
+}
+
+.modal-content button.reject {
+  background-color: #dc3545;
+}
+
+.modal-content button.accept:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button.reject:hover {
+  background-color: #c82333;
+}
+/* Contenedor principal del modal */
+
+
+/* Mostrar el modal cuando esté abierto */
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Contenido del modal */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Título del modal */
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+/* Texto descriptivo */
+.modal-content p {
+  color: #495057;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+
+/* Efecto al enfocar el selector */
+.modal-content select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botones */
+.modal-content button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Botón de aceptar */
+.modal-content button.accept {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-content button.accept:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Botón de cerrar/rechazar */
+.modal-content button.reject {
+  background-color: #dc3545;
+  color: white;
+  margin-top: 10px;
+}
+
+.modal-content button.reject:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Estilo responsivo para dispositivos pequeños */
+@media (max-width: 668px) {
+  .modal {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .modal-content h2 {
+    font-size: 1.5em;
+  }
+}
+
+/* Transición suave en el modal */
+.modal-content {
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal.open .modal-content {
+  transform: scale(1);
+}
+/* chat*/
+.chat-container {
+  width: 100%;
+  height: 50%;
+  max-width: 450px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-container h3 {
+  margin: 0;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: #fff;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.chat-messages {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+.chat-messages div {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.chat-messages div strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.chat-messages div {
+  background-color: #e3e7f1;
+  align-self: flex-start;
+}
+
+.chat-messages div.self-message {
+  background-color: #d1e7dd;
+  text-align: right;
+}
+
+.chat-input-container {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.chat-input-container input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.chat-input-container button {
+  padding: 8px 15px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.chat-input-container button:hover {
+  background-color: #357ab8;
+}
+/* Contenedor principal del chat */
+.chat-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del chat */
+.chat-container h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+/* Contenedor de mensajes */
+.chat-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Cada mensaje en el chat */
+.chat-message {
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+/* Mensaje del usuario actual */
+.chat-message.user-message {
+  background-color: #e1f5fe;
+  align-self: flex-end;
+  color: #0277bd;
+  max-width: 75%;
+}
+
+/* Mensaje de otros usuarios */
+.chat-message.other-message {
+  background-color: #eceff1;
+  align-self: flex-start;
+  color: #455a64;
+  max-width: 75%;
+}
+
+/* Input para enviar mensajes */
+.chat-container input[type="text"] {
+  width: calc(100% - 80px);
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  margin-right: 5px;
+}
+
+/* Botón para enviar mensaje */
+.chat-container button {
+  padding: 10px 15px;
+  font-size: 1em;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-container button:hover {
+  background-color: #388e3c;
+}
+
+/* Estilo para pantallas grandes */
+@media (min-width: 168px) {
+  .chat-container {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .chat-messages {
+    max-height: 500px;
+  }
+
+  .chat-container h3 {
+    font-size: 2em;
+  }
+  .modal-2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
+    display: flex;
+    flex-direction: column;
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 500px; /* Limita el ancho máximo */
+}
+
+.modal-2.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilos del contenedor de chat */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.chat-header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.chat-input-container {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input-container input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input-container button {
+    padding: 8px 15px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chat-input-container button:hover {
+    background-color: #357ab8;
+}
+
+/* Responsividad */
+@media (max-width: 1064px) {
+    .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal, .modal-2 {
+        width: 85%;
+        max-width: none;
+        padding: 15px;
+    }
+}
+
+  /* profile.component.css */
+.profile-modal {
+  padding: 20px;
+  text-align: center;
+}
+.profile-modal img {
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.welcome-container {
+  display: flex;
+  align-items: center;
+  max-width: 55px;
+  max-height: 40px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+/* Estilos generales para el modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+
+
+/* Estilos del contenedor del modal */
+.modal-container {
+  background-color: #fff; /* Fondo blanco para el modal */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative; /* Para posicionar el botón de cierre */
+  animation: fadeIn 0.3s ease; /* Animación de entrada */
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: scale(0.8);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
+}
+
+/* Botón de cierre */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Imagen de perfil circular */
+.profile-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 40%;
+  margin: 20px auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botón de subir imagen */
+.upload-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: #45a049;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 600px) {
+  .modal-container {
+      width: 95%;
+      max-width: none;
+      border-radius: 0;
+  }
+
+  .profile-image {
+      width: 80px;
+      height: 80px;
+  }
+}
+
+.img-prefil{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 175px;
+  height: 180px;
+  border-radius: 50%;
+  margin: 20px auto;
+  object-fit: cover;
+  display: block;
+}
+.close-button {
+  position: relative;
+  bottom: 0px;
+  right: 3px;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.open-chat-button {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  padding: 10px 15px;
+  background-color: #0040ff; /* Color azul */
+  color: white;
+  border: none;
+  border-radius: 50px; /* Forma de botón redondeado */
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Para que se mantenga por encima de otros elementos */
+  transition: background-color 0.3s ease;
+}
+
+.open-chat-button:hover {
+  background-color: #0056b3; /* Color más oscuro al pasar el ratón */
+}
+.chat-open-button {
+  background-color: #007bff; /* Color de fondo */
+  color: white; /* Color del icono */
+  border: none;
+  border-radius: 50%;
+  
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  transition: transform 0.2s ease;
+}
+
+.chat-open-button:hover {
+  transform: scale(1.1); /* Agranda el botón ligeramente al pasar el ratón */
+}
+
+.chat-open-button:active {
+  transform: scale(1); /* Restaura el tamaño al hacer clic */
+}
+
+.material-symbols-outlined {
+  font-size: 24px; /* Tamaño del icono */
+}
+/* Contenedor principal de las notificaciones */
+.chat-notification-container {
+  display: flex;
+  flex-direction: column; /* Posiciona elementos uno debajo del otro */
+  align-items: center; /* Centra ambos botones horizontalmente */
+  gap: 10px; /* Espaciado entre el botón de chat y notificaciones */
+}
+
+.notification-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Botón de notificaciones */
+.notification-div {
+  position: sticky; /* Necesario para centrar la lista con respecto al botón */
+  padding-left: 30px;
+}
+
+.notification-button-icon {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.notification-button-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Lista de notificaciones */
+.notification-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: none; /* Oculta la lista inicialmente */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 280px;
+  position: absolute;
+  left: 50%; /* Centra horizontalmente respecto al botón */
+  transform: translateX(-50%); /* Ajusta el centrado exacto */
+  top: 50px; /* Espaciado debajo del botón */
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto; /* Scroll si la lista es muy larga */
+}
+
+/* Mostrar la lista al hacer clic */
+.notification-div:hover .notification-list {
+  display: block;
+}
+
+/* Estilo de cada notificación */
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+/* Botón para aceptar notificaciones */
+.notification-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.notification-button:hover {
+  background-color: #45a049;
+}
+
+}
+
+
