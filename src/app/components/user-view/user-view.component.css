@@ -631,12 +631,6 @@
   margin-bottom: 15px;
 }
 
-.welcome-container {
-  display: flex;
-  align-items: center;
-  max-width: 55px;
-  max-height: 40px;
-}
 
 .profile-info {
   display: flex;

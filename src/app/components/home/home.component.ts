@@ -119,7 +119,7 @@ export class HomeComponent {
     }
     
     this.proyectrefreshInterval = setInterval(() => {
-      console.log('estan cargando')
+      //console.log('estan cargando')
       this.userService.getUserData().subscribe(data => {
         this.userData = data;
         this.ordenarProyectosPorPrioridad()

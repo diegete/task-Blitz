@@ -1,39 +1,55 @@
 <head>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=chat" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=chat" />
 </head>
 
-@if (userData && userData.profile.user_type == 'empleado') { <div class="container">
+@if (userData && userData.profile.user_type == 'empleado') {
+<div class="container">
   <!-- Rectángulo de proyectos -->
+
   <div class="rectangulo-izquierda">
-    <div class="welcome-container">
-      <div class="profile-info">
-        <img class="img-perfil"
-     [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
-     alt="Imagen de perfil"
-     class="profile-image"
-     (click)="openImageModal()" />
-        <span>Bienvenido, {{ userData.username }}</span>
-        <div class="invitation-button">
-          <button (click)="toggleInvitations()">📨 Invitaciones ({{ pendingInvitations.length }})</button>
-        </div>
-        <div class="notification-div">
-          <button class="notification-button-icon" (click)="loadNotifications()">📨</button>
-          <ul class="notification-list">
-            <li class="notification-item" *ngFor="let notification of notifications">
-              <span class="notification-message">{{ notification.message }}</span>
-              <button class="notification-button" (click)="markAsRead(notification.id)">Aceptar</button>
-            </li>
-          </ul>
-        </div>
+    <div class="card shadow-sm p-4 mb-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <!-- Imagen de perfil -->
+        <img class="rounded-circle"
+          src="{{ pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg' }}"
+          alt="Imagen de perfil" width="60" height="60" (click)="openImageModal()" />
+        <!-- Texto de bienvenida -->
+        <h5 class="mb-0">Bienvenido, {{ userData.username }}</h5>
+      </div>
+
+      <!-- Botón de invitaciones -->
+      <div class="mt-3">
+        <button class="btn btn-outline-primary btn-sm" (click)="toggleInvitations()">
+          📨 Invitaciones ({{ pendingInvitations.length }})
+        </button>
+      </div>
+
+      <!-- Notificaciones -->
+      <div class="mt-4">
+        <h5 class="mb-0">Notificaciones</h5>
+        <button class="btn btn-outline-secondary btn-sm mb-2" (click)="loadNotifications()">
+          Cargar Notificaciones 📨
+        </button>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let notification of notifications">
+            <span>{{ notification.message }}</span>
+            <button class="btn btn-success btn-sm" (click)="markAsRead(notification.id)">
+              Aceptar
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
-    
-    
+
+
+
+
     <h3>Proyectos:</h3>
     <ul>
-      <li *ngFor="let proyecto of userData?.proyectos" 
-          [class.selected]="proyecto === selectedProject" 
-          (click)="selectProject(proyecto)">
+      <li *ngFor="let proyecto of userData?.proyectos" [class.selected]="proyecto === selectedProject"
+        (click)="selectProject(proyecto)">
         {{ proyecto.title }}
       </li>
     </ul>
@@ -52,95 +68,111 @@
     </ng-template>
   </div>
   <button class="chat-open-button" (click)="openChat()"><span class="material-symbols-outlined">
-    chat
+      chat
     </span></button>
-   
-  </div>
+
+</div>
 
 
 }@else {
-  <p>No ha iniciado sesión.</p>
-  <button (click)="goLogin()">ir a inicio de sesión</button>
-} 
+<p>No ha iniciado sesión.</p>
+<button (click)="goLogin()">ir a inicio de sesión</button>
+}
 
-  <div class="modal-2" *ngIf="isChatOpen ==true && selectedProject" >
-    <div class="chat-container"  >
-      
-      <h3>Chat del Proyecto: {{selectedProject.title}}</h3>
-      <div class="chat-messages">
-        <div *ngFor="let msg of chatMessages" [ngClass]="{'self-message': msg.user === userData.username}">
-          <strong>{{ msg.user }}:</strong> {{ msg.content }}
+<div class="modal-2" *ngIf="isChatOpen ==true && selectedProject">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Chat del Proyecto: {{ selectedProject.title }}
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeChat()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Mensajes del chat -->
+        <div class="chat-messages mb-3">
+          <div *ngFor="let msg of chatMessages" [ngClass]="{
+              'alert alert-primary text-end': msg.user === userData.username,
+              'alert alert-secondary text-start': msg.user !== userData.username
+            }">
+            <strong>{{ msg.user }}:</strong> {{ msg.content }}
+          </div>
         </div>
       </div>
-      <div class="chat-input-container">
-        <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
-        <button (click)="sendMessage()">Enviar</button>
-        <button class="close-button" (click)="closeChat()">Cerrar</button>
+      <div class="modal-footer">
+        <!-- Entrada del mensaje -->
+        <div class="input-group w-100">
+          <input type="text" class="form-control" [(ngModel)]="newMessage" placeholder="Escribe un mensaje" />
+          <button class="btn btn-primary" (click)="sendMessage()">
+            Enviar
+          </button>
+          <button (click)="closeChat()" class="btn btn-secondary">Cerrar</button>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
 
 
 
 
-  <!-- Modal para los detalles de la tarea -->
-  <div class="modal" [class.open]="isModalOpen">
-    <div class="modal-content">
-      <h2>Detalles de la Tarea</h2>
-      <form [formGroup]="taskUpdateForm" (ngSubmit)="enviarAvance()">
-        <p><strong>Título:</strong> {{ selectedTask?.tarea.titulo }}</p>
-        <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
-        <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
-        <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
-        <p><strong>Fecha entrega:</strong> {{ selectedTask?.tarea.fechamax | date: 'short' }}</p>
-  
-        <!-- Selector de avance con FormControl -->
-        <label for="avance">Selecciona el Avance:</label>
-        <select id="avance" formControlName="avance" required>
-          <option value="iniciada">Iniciada</option>
-          <option value="Cursando">Cursando</option>
-          <option value="finalizada">Finalizada</option>
-        </select>
-  
-        <!-- Botones -->
-        <button type="submit" [disabled]="taskUpdateForm.invalid">Enviar Avance</button>
-        <button type="button" (click)="closeModal()">Cerrar</button>
-      </form>
-    </div>
+<!-- Modal para los detalles de la tarea -->
+<div class="modal" [class.open]="isModalOpen">
+  <div class="modal-content">
+    <h2>Detalles de la Tarea</h2>
+    <form [formGroup]="taskUpdateForm" (ngSubmit)="enviarAvance()">
+      <p><strong>Título:</strong> {{ selectedTask?.tarea.titulo }}</p>
+      <p><strong>Descripción:</strong> {{ selectedTask?.tarea.descripcion }}</p>
+      <p><strong>Asignado por:</strong> {{ selectedTask?.asignado_por }}</p>
+      <p><strong>Fecha de Asignación:</strong> {{ selectedTask?.fecha_asignacion | date: 'short' }}</p>
+      <p><strong>Fecha entrega:</strong> {{ selectedTask?.tarea.fechamax | date: 'short' }}</p>
+
+      <!-- Selector de avance con FormControl -->
+      <label for="avance">Selecciona el Avance:</label>
+      <select id="avance" formControlName="avance" required>
+        <option value="iniciada">Iniciada</option>
+        <option value="Cursando">Cursando</option>
+        <option value="finalizada">Finalizada</option>
+      </select>
+
+      <!-- Botones -->
+      <button type="submit" [disabled]="taskUpdateForm.invalid">Enviar Avance</button>
+      <button type="button" (click)="closeModal()">Cerrar</button>
+    </form>
   </div>
-  
-  
+</div>
 
 
-  <!-- Modal de invitaciones pendientes -->
-  <div class="modal" [class.open]="isInvitationModalOpen">
-    <div class="modal-content">
-      <h2>Invitaciones pendientes</h2>
-      <ul *ngIf="pendingInvitations.length > 0; else noInvitaciones">
-        <li *ngFor="let invitation of pendingInvitations">
-          <!-- Asegurarse de que el título del proyecto aparezca -->
-          <p><strong>Proyecto:</strong> {{ invitation.project.title }}</p>
-          <button (click)="acceptInvitation(invitation.id)">Aceptar</button>
-          <button (click)="rejectInvitation(invitation.id)">Rechazar</button>
-        </li>
-      </ul>
-      <ng-template #noInvitaciones>
-        <p>No tienes invitaciones pendientes.</p>
-      </ng-template>
-      <button type="button" (click)="closeInvitationModal()">Cerrar</button>
-    </div>
+
+
+<!-- Modal de invitaciones pendientes -->
+<div class="modal" [class.open]="isInvitationModalOpen">
+  <div class="modal-content">
+    <h2>Invitaciones pendientes</h2>
+    <ul *ngIf="pendingInvitations.length > 0; else noInvitaciones">
+      <li *ngFor="let invitation of pendingInvitations">
+        <!-- Asegurarse de que el título del proyecto aparezca -->
+        <p><strong>Proyecto:</strong> {{ invitation.project.title }}</p>
+        <button (click)="acceptInvitation(invitation.id)">Aceptar</button>
+        <button (click)="rejectInvitation(invitation.id)">Rechazar</button>
+      </li>
+    </ul>
+    <ng-template #noInvitaciones>
+      <p>No tienes invitaciones pendientes.</p>
+    </ng-template>
+    <button type="button" (click)="closeInvitationModal()">Cerrar</button>
   </div>
+</div>
 
-  <div class="modal-backdrop" *ngIf="showImageModal">
-    <div class="modal-content">
-      <span class="close-button" (click)="closeImageModal()"></span>
-      <h2>Actualizar Imagen de Perfil</h2>
-      <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
-      <input class="form-control" type="file" (change)="onImageSelected($event)" />
-      <button (click)="updateProfile()">Actualizar Imagen </button>
-      <button class="alter" (click)="logOut()">Cerrar sesión</button>
-      <button class="alter" (click)="closeImageModal()"> Cerrar</button> 
-    </div>
+<div class="modal-backdrop" *ngIf="showImageModal">
+  <div class="modal-content">
+    <span class="close-button" (click)="closeImageModal()"></span>
+    <h2>Actualizar Imagen de Perfil</h2>
+    <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
+    <input class="form-control" type="file" (change)="onImageSelected($event)" />
+    <button (click)="updateProfile()">Actualizar Imagen </button>
+    <button class="alter" (click)="logOut()">Cerrar sesión</button>
+    <button class="alter" (click)="closeImageModal()"> Cerrar</button>
   </div>
-  
+</div>
