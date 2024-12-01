@@ -115,7 +115,7 @@ export class HomeComponent {
       });
     } else {
       alert('No ha iniciado sesión')
-      console.log('No hay un usuario autenticado');
+      //console.log('No hay un usuario autenticado');
     }
     
     this.proyectrefreshInterval = setInterval(() => {
@@ -147,7 +147,7 @@ export class HomeComponent {
   }
 
   openProjectModal(): void {
-    console.log('abri')
+    // console.log('abri')
     this.isProjectModalOpen = true;
   }
 
@@ -225,7 +225,7 @@ selectProject(proyecto: any): void {
   if (token) {
     this.proyectService.getProjectMetrics(proyecto.id, token).subscribe(metrics => {
       this.selectedProject.metrics = metrics; // Guardar métricas en el proyecto seleccionado
-      console.log(metrics)
+      //console.log(metrics)
     });
   }
 }
@@ -262,11 +262,12 @@ createTask(): void {
     carga: this.taskForm.value.carga,  // El valor numérico 5, 3 o 1
     proyecto: this.selectedProject.id,
     fechaInicio: this.taskForm.value.fechaIncio,
-    fechaMax: this.taskForm.value.fechaMax
+    fechamax: this.taskForm.value.fechaMax
   };
   
-  if (token && this.taskForm.value.fechaIncio != null && this.taskForm.value.fechaMax) {
+  if (token && this.taskForm.value.fechaIncio != null && this.taskForm.value.fechaMax !=null) {
     this.taskService.createTask(taskData, token).subscribe((response: any) => {
+      
       // Añadir la nueva tarea al array local de tareas
       const nuevaTarea = {
         id: response.id,
@@ -433,6 +434,7 @@ assignTask(): void {
       this.proyectService.actualizarPrioridad(proyecto.id, Number(proyecto.prioridad) ,token).subscribe(
         () => {
           alert('se ha cambiado la prioridad')
+          console.log(this.selectedProject.members)
           this.ordenarProyectosPorPrioridad()
         },
         error => {
@@ -526,13 +528,21 @@ assignTask(): void {
   exportToExcel() {
     const metrics = this.selectedProject.metrics;
   
-    // Datos a exportar
+    // Datos generales del proyecto
     const data = [
       { Métrica: 'Total de Tareas', Valor: metrics.total_tasks },
       { Métrica: 'Tareas Completadas', Valor: metrics.completed_tasks },
       { Métrica: 'Tareas en Progreso', Valor: metrics.inprogress_tasks },
       { Métrica: 'Progreso (%)', Valor: metrics.progress },
     ];
+  
+    // Agregar métricas por miembro
+    this.selectedProject.members.forEach((member: any) => {
+      data.push({
+        Métrica: `Carga de ${member.username}`,
+        Valor: member.profile.cargaTrabajo > 0 ? member.profile.cargaTrabajo : 'No especificada',
+      });
+    });
   
     // Crear hoja de Excel
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -543,6 +553,7 @@ assignTask(): void {
     XLSX.writeFile(workbook, `metricas_proyecto_${this.selectedProject.title}.xlsx`);
   }
   
+  
   exportToPDF() {
     const doc = new jsPDF();
     const metrics = this.selectedProject.metrics;
@@ -550,13 +561,21 @@ assignTask(): void {
     // Título
     doc.text('Métricas del Proyecto', 14, 20);
   
-    // Datos para la tabla
+    // Datos generales
     const tableData = [
       ['Total de Tareas', metrics.total_tasks],
       ['Tareas en Progreso', metrics.inprogress_tasks],
       ['Tareas Completadas', metrics.completed_tasks],
       ['Progreso (%)', `${metrics.progress}%`],
     ];
+  
+    // Agregar métricas por miembro
+    this.selectedProject.members.forEach((member: any) => {
+      tableData.push([
+        `Carga de ${member.username}`,
+        member.profile.cargaTrabajo || 'No especificada',
+      ]);
+    });
   
     // Agregar tabla con autoTable
     (doc as any).autoTable({
@@ -568,4 +587,5 @@ assignTask(): void {
     // Guardar el PDF
     doc.save(`metricas_proyecto_${this.selectedProject.title}.pdf`);
   }
+  
 }

@@ -5,18 +5,36 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 </head>
+<header class="navbar">
+  <div class="logo">
+      <img src="logo.png" alt="Logo" class="logo-img">
+      <h2 class="text-welcome">Bienvenido: {{ userData?.username }}</h2>
+      
+  </div>
+  <div class="nav-right">
+      <nav class="nav-links">
+
+      </nav>
+      <div class="nav-buttons">
+          <div class="user-icon">
+            <img class="img-perfil"
+            [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
+            alt="Imagen de perfil"
+            class="profile-image"
+            (click)="openImageModal()" />
+          </div>
+          <button class="alter" (click)="logOut()">Cerrar sesión</button>
+      </div>
+  </div>
+</header>
 
 @if (userData) {
   <div class="container">
     <!-- Primer rectángulo: Proyectos y Prioridades -->
     <div class="col-md-4 mb-4" class="rectangulo-izquierda">
-        <div class="card shadow-sm p-3">
-          <img class="img-perfil"
-      [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
-      alt="Imagen de perfil"
-      class="profile-image"
-      (click)="openImageModal()" />
-        <h2>Bienvenido: {{ userData?.username }}</h2>
+        <div>
+          
+        
         
     </div>
       <h3>Proyectos:</h3>
@@ -247,10 +265,10 @@
   <div class="modal-content">
     <span class="close-button" (click)="closeImageModal()"></span>
     <h2>Actualizar Imagen de Perfil</h2>
-    <img [src]="userData.profile.image" alt="Imagen de perfil actual" class="profile-img" />
+    <img [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'" alt="Imagen de perfil actual" class="profile-img" />
     <input class="form-control" type="file" (change)="onImageSelected($event)" />
     <button (click)="updateProfile()">Actualizar Imagen </button>
-    <button class="alter" (click)="logOut()">Cerrar sesión</button>
+    
     <button class="alter" (click)="closeImageModal()"> Cerrar</button> 
   </div>
 </div>

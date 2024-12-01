@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CsrfService {
   private apiUrl = 'http://localhost:8000/api/notifications/';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Obtén el token CSRF desde las cookies
   getCsrfToken(): string | null {
@@ -27,13 +27,17 @@ export class CsrfService {
     return this.http.post(url, body, { headers, withCredentials: true });
   }
 
-  getNotifications(token:string): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<any>(this.apiUrl, {headers});
+  getNotifications(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any[]>('http://localhost:8000/api/notifications/', {
+      headers,
+    });
   }
 
-  markAsRead(notificationId: number, token:string): Observable<any> {
+  markAsRead(notificationId: number, token: string): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post<any>(this.apiUrl, { notification_id: notificationId },{headers});
+    return this.http.post<any>(this.apiUrl, { notification_id: notificationId }, { headers });
   }
 }

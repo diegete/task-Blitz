@@ -568,3 +568,60 @@ button[type="button"]:hover {
 .export-button:active {
   transform: scale(0.95);
 }
+.navbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 2px solid #f4a042;
+  background-color: #fff; 
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f4a042;
+  font-weight: bold;
+}
+
+.logo-img {
+  width: 30px;
+  height: 30px;
+}
+
+
+.nav-right {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  gap: 20px;
+  flex: 1; 
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #f4a042;
+}
+
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.text-welcome{
+  padding-left: 15px;
+}

@@ -71,7 +71,7 @@ export class UserViewComponent {
           this.loadPendingInvitations();
           this.loadNotifications();
           this.invitationfreshInterval = setInterval(() => {
-            console.log('estan cargando')
+            //console.log('estan cargando')
             this.loadPendingInvitations();
             
           }, 5000);
@@ -343,31 +343,39 @@ goLogin(){
 }
 
 loadNotifications(): void {
-  if(this.token){
+  if (this.token) {
     this.notificationService.getNotifications(this.token).subscribe((data) => {
-      this.notifications = data;
+      this.notifications = data.map((notification: any) => ({
+        ...notification,
+        type: notification.type, // Asegúrate de que el tipo esté incluido
+      }));
     });
-  }else{
-    console.log('No hay token')
+  } else {
+    console.log('No hay token');
   }
-
 }
 
 markAsRead(notificationId: number): void {
-  if(this.token){
-    this.notificationService.markAsRead(notificationId,this.token).subscribe(() => {
+  if (this.token) {
+    this.notificationService.markAsRead(notificationId, this.token).subscribe(() => {
       this.notifications = this.notifications.filter(
         (n) => n.id !== notificationId
       );
     });
-  }else{
-    alert('No tienes permiso para realizar esta acción')
+  } else {
+    alert('No tienes permiso para realizar esta acción');
   }
-  
 }
+
+handleOverdue(notificationId: number): void {
+  alert('Tiene taras vencidas');
+
+}
+
 get nonCompletedTasks() {
   return this.selectedProjectTasks?.filter(tarea => tarea.tarea.estado === false) || [];
 }
+
 }
 
 
