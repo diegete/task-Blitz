@@ -24,6 +24,8 @@ export class LoginComponent {
       
     }
   };
+
+
   showNotification = false;
   loginForm: FormGroup;
   modalForm: FormGroup;

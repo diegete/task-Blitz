@@ -1,198 +1,218 @@
 <head>
+
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  </head>
 </head>
-</head>
+
 <header class="navbar">
+  @if (userData && userData.profile.user_type =='jefe') {
+    <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" class="logo-img">
   <div class="logo">
-      <img src="logo.png" alt="Logo" class="logo-img">
-      <h2 class="text-welcome">Bienvenido: {{ userData?.username }}</h2>
-      
+
+    <a class="a-b">Bienvenido: {{ userData?.username }}</a>
+
   </div>
   <div class="nav-right">
-      <nav class="nav-links">
+    <nav class="nav-links">
+      <a>Ver Metricas</a>
+      <a (click)="openImageModal()">Ver Perfil</a>
 
-      </nav>
-      <div class="nav-buttons">
-          <div class="user-icon">
-            <img class="img-perfil"
-            [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
-            alt="Imagen de perfil"
-            class="profile-image"
-            (click)="openImageModal()" />
-          </div>
-          <button class="alter" (click)="logOut()">Cerrar sesión</button>
+
+    </nav>
+    <div class="nav-buttons">
+      <div class="user-icon">
+        <img class="user-img"
+          [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
+          alt="Imagen de perfil" class="profile-image" />
       </div>
+      <button class="btn-register" (click)="logOut()">Cerrar sesión</button>
+    </div>
   </div>
+  }@else {
+
+  }
+
 </header>
 
-@if (userData) {
-  <div class="container">
-    <!-- Primer rectángulo: Proyectos y Prioridades -->
-    <div class="col-md-4 mb-4" class="rectangulo-izquierda">
-        <div>
-          
-        
-        
-    </div>
+@if (userData && userData.profile.user_type =='jefe') {
+<div class="container">
+  <!-- Primer rectángulo: Proyectos y Prioridades -->
+  <div class="col-md-4 mb-4" class="rectangulo-izquierda">
+    <div class="invitar">
       <h3>Proyectos:</h3>
-      <ul>
-        <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
-          {{ proyecto.title }}
-        </li>
-      </ul>
-  
-      <!-- Formulario para priorizar un proyecto seleccionado -->
+      
       <div *ngIf="selectedProject">
-        <h3>Priorizar Proyecto: {{ selectedProject.title }}</h3>
-        <label for="prioridad-{{ selectedProject.id }}">Prioridad:</label>
-        <select 
-          id="prioridad-{{ selectedProject.id }}" 
-          [(ngModel)]="selectedProject.prioridad" 
-          (change)="actualizarPrioridad(selectedProject)">
-          <option [value]="1">Baja</option>
-          <option [value]="3">Media</option>
-          <option [value]="5">Alta</option>
-        </select>
+        <button class="invite-button" (click)="openInvitationModal()"><span class="material-symbols-outlined">
+            person_add
+            <!-- esto no se cambia a texto si no se bugea todo -->
+          </span></button>
       </div>
-  
-      <button (click)="openProjectModal()">Crear Proyecto</button>
     </div>
-  
-    <!-- Segundo rectángulo: Tareas del proyecto seleccionado -->
-    <div class="rectangulo-centro" *ngIf="selectedProject">
-      <h3>Tareas del Proyecto: {{ selectedProject.title }}</h3>
-      <ul>
-        <li *ngFor="let tarea of selectedProjectTasks" 
-            (click)="!tarea.asignada && selectTask(tarea)"
-            [class.asignada]="tarea.asignada">
-          {{ tarea.titulo }}
-        </li>
-      </ul>
-      <button  (click)="openTaskModal()">Crear Tarea</button>
-      <button (click)="openTaskEditModal()">Actualizar la tarea</button>
+
+    <ul>
+      <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
+        {{ proyecto.title }}
+        <h6> Prioridad:{{ proyecto.prioridad}}</h6>
+      </li>
+    </ul>
+
+    <!-- Formulario para priorizar un proyecto seleccionado -->
+    <div *ngIf="selectedProject">
+      <h3>Priorizar Proyecto: {{ selectedProject.title }}</h3>
+      <label for="prioridad-{{ selectedProject.id }}">Prioridad:</label>
+      <select id="prioridad-{{ selectedProject.id }}" [(ngModel)]="selectedProject.prioridad"
+        (change)="actualizarPrioridad(selectedProject)">
+        <option [value]="1">Baja</option>
+        <option [value]="3">Media</option>
+        <option [value]="5">Alta</option>
+      </select>
     </div>
-  
-    <!-- Tercer rectángulo: Asignar tareas a un usuario del proyecto -->
-    <div class="rectangulo-derecha" *ngIf="selectedProject">
-      <h3>Asignar Tarea a Usuarios</h3>
-      <p>Seleccione un usuario del proyecto:</p>
-      <ul>
-        <li *ngFor="let miembro of selectedProject.members"
-            (click)="toggleSelectUser(miembro)" 
-            [class.selected]="miembro.selected">
-          {{ miembro.username }}
-          <p class="carga-text">Carga de trabajo</p> 
-    
-          <!-- Barra de carga -->
-          <div class="progress-bar-container">
-            <div class="progress-bar" 
-                 [style.width.%]="getCargaPercentage(miembro.profile.cargaTrabajo)">
-            </div>
+
+    <button (click)="openProjectModal()">Crear Proyecto</button>
+  </div>
+
+  <!-- Segundo rectángulo: Tareas del proyecto seleccionado -->
+  <div class="rectangulo-centro" *ngIf="selectedProject">
+    <h3>Tareas del Proyecto: {{ selectedProject.title }}</h3>
+    <ul>
+      <li *ngFor="let tarea of selectedProjectTasks" (click)="!tarea.asignada && selectTask(tarea)"
+        [class.asignada]="tarea.asignada">
+        {{ tarea.titulo }}
+      </li>
+    </ul>
+    <button (click)="openTaskModal()">Crear Tarea</button>
+    <button (click)="openTaskEditModal()">Actualizar la tarea</button>
+  </div>
+
+  <!-- Tercer rectángulo: Asignar tareas a un usuario del proyecto -->
+  <div class="rectangulo-derecha" *ngIf="selectedProject">
+    <h3>Asignar Tarea a Usuarios</h3>
+    <p>Seleccione un usuario del proyecto:</p>
+    <ul>
+      <li *ngFor="let miembro of selectedProject.members" (click)="toggleSelectUser(miembro)"
+        [class.selected]="miembro.selected">
+        {{ miembro.username }}
+        <p class="carga-text">Carga de trabajo</p>
+
+        <!-- Barra de carga -->
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width.%]="getCargaPercentage(miembro.profile.cargaTrabajo)">
+            <img src="" >
           </div>
-          <p class="carga-text">{{ miembro.profile.cargaTrabajo }} / 10</p>
-        </li>
-      </ul>
-      <button (click)="confirmAssign()">Asignar Tareas</button>
-    </div>
-    
-  
-    <!-- Modales -->
-    <div *ngIf="isProjectModalOpen" class="modal">
-      <div class="modal-content">
-        <h2>Crear Proyecto</h2>
-        <form [formGroup]="projectForm" (ngSubmit)="crearProyecto()">
-          <label for="title">Título del proyecto:</label>
-          <input formControlName="title" id="title" type="text">
-          <button type="submit" [disabled]="projectForm.invalid">Crear Proyecto</button>
-          <button type="button" (click)="closeProjectModal()">Cerrar</button>
-        </form>
-      </div>
-    </div>
-  
-    <div *ngIf="isTaskModalOpen" class="modal">
-      <div class="modal-content">
-        <h2>Crear Tarea</h2>
-        <form [formGroup]="taskForm" (ngSubmit)="createTask()">
-          <label for="titulo">Título:</label>
-          <input formControlName="titulo" id="titulo" type="text">
-  
-          <label for="descripcion">Descripción:</label>
-          <textarea formControlName="descripcion" id="descripcion"></textarea>
-  
-          <label for="carga">Carga de trabajo:</label>
-          <select formControlName="carga" id="carga">
-            <option value="5">Alto</option>
-            <option value="3">Medio</option>
-            <option value="1">Bajo</option>
-          </select>
-          <label for="fechaIncio">Fecha inicio:</label>
-          <input formControlName="fechaIncio" id="fechaIncio" type="date">
-  
-          <label for="fechaMax">Fecha max:</label>
-          <input formControlName="fechaMax" id="fechaMax" type="date">
-  
-          <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
-          <button type="button" (click)="closeTaskModal()">Cerrar</button>
-        </form>
-      </div>
+        </div>
+        <p class="carga-text">{{ miembro.profile.cargaTrabajo }} / 10</p>
+      </li>
+    </ul>
+    <button (click)="confirmAssign()">Asignar Tareas</button>
+  </div>
+
+
+  <!-- Modales -->
+  <div *ngIf="isProjectModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Crear Proyecto</h2>
+      <form [formGroup]="projectForm" (ngSubmit)="crearProyecto()">
+        <label for="title">Título del proyecto:</label>
+        <input formControlName="title" id="title" type="text">
+        <button type="submit" [disabled]="projectForm.invalid">Crear Proyecto</button>
+        <button type="button" (click)="closeProjectModal()">Cerrar</button>
+      </form>
     </div>
   </div>
-  <div *ngIf="selectedProject">
-    <h2> Metricas del {{ selectedProject.title }}</h2>
-  
-    <!-- Mostrar métricas del proyecto -->
-     <div class="col-md-12 mb-8" >  
+
+  <div *ngIf="isTaskModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Crear Tarea</h2>
+      <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+        <label for="titulo">Título:</label>
+        <input formControlName="titulo" id="titulo" type="text">
+
+        <label for="descripcion">Descripción:</label>
+        <textarea formControlName="descripcion" id="descripcion"></textarea>
+
+        <label for="carga">Carga de trabajo:</label>
+        <select formControlName="carga" id="carga">
+          <option value="5">Alto</option>
+          <option value="3">Medio</option>
+          <option value="1">Bajo</option>
+        </select>
+        <label for="fechaIncio">Fecha inicio:</label>
+        <input formControlName="fechaIncio" id="fechaIncio" type="date">
+
+        <label for="fechaMax">Fecha max:</label>
+        <input formControlName="fechaMax" id="fechaMax" type="date">
+
+        <button type="submit" [disabled]="taskForm.invalid">Crear Tarea</button>
+        <button type="button" (click)="closeTaskModal()">Cerrar</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedProject">
+  <h2> Metricas del {{ selectedProject.title }}</h2>
+
+  <!-- Mostrar métricas del proyecto -->
+  <div class="col-md-12 mb-8">
     <div class="card text-center">
       <!-- Gráfico Circular de Progreso -->
-        <div class="progress-section">
-          <div class="card-header"><p><strong>Progreso General:</strong></p></div>
-          <div class="card-body">
-            <div class="progress-circle-container">
-              <div class="progress-circle" [style.background]="getCircularProgress(selectedProject?.metrics?.progress)">
-                <span>{{ selectedProject?.metrics?.progress }}%</span>
-              </div>
-            </div>
-          </div>  
+      <div class="progress-section">
+        <div class="card-header">
+          <p><strong>Progreso General:</strong></p>
         </div>
-      
-        <!-- Gráfico de Barras o Anillos -->
-        <div class="tasks-breakdown">
-          <p><strong>Desglose de Tareas:</strong></p>
-        
-          <div class="legend">
-            <span  class="pending">Total de tareas: {{ selectedProject?.metrics?.total_tasks }}</span>
-            <span  class="in-progress">En Progreso: {{ selectedProject?.metrics?.inprogres_taks }}</span>
-            <span  class="completed">Completadas: {{ selectedProject?.metrics?.completed_tasks }}</span>
+        <div class="card-body">
+          <div class="progress-circle-container">
+            <div class="progress-circle" [style.background]="getCircularProgress(selectedProject?.metrics?.progress)">
+              <span>{{ selectedProject?.metrics?.progress }}%</span>
+            </div>
           </div>
         </div>
-        <div class="card-footer text-body-secondary" >
-          <button class="btn btn-primary" class="btn btn-primary" (click)="exportToExcel()">Exportar a Excel</button>
-          <button class="btn btn-primary" class="btn btn-primary" (click)="exportToPDF()">Exportar a PDF</button>
-        </div>
-
       </div>
-  </div>
-    
-    
 
+      <!-- Gráfico de Barras o Anillos -->
+      <div class="tasks-breakdown">
+        <p><strong>Desglose de Tareas:</strong></p>
+
+        <div class="legend">
+          <span class="pending">Total de tareas: {{ selectedProject?.metrics?.total_tasks }}</span>
+          <span class="in-progress">En Progreso: {{ selectedProject?.metrics?.inprogres_taks }}</span>
+          <span class="completed">Completadas: {{ selectedProject?.metrics?.completed_tasks }}</span>
+        </div>
+      </div>
+      <div class="card-footer text-body-secondary">
+        <button class="btn btn-primary" class="btn btn-primary" (click)="exportToExcel()">Exportar a Excel</button>
+        <button class="btn btn-primary" class="btn btn-primary" (click)="exportToPDF()">Exportar a PDF</button>
+      </div>
+
+    </div>
   </div>
-  
-  <ng-template #noProyectos>
-    <p >No tienes proyectos disponibles.</p>
-  </ng-template>
-  <div *ngIf="selectedProject">
-    <button class="invite-button" (click)="openInvitationModal()"><span class="material-symbols-outlined">
-      person_add 
-      <!-- esto no se cambia a texto si no se bugea todo -->
-      </span></button>
+
+
+
+</div>
+
+<ng-template #noProyectos>
+  <p>No tienes proyectos disponibles.</p>
+</ng-template>
+<!-- footer v1 -->
+<div class="card">
+  <div class="card-header">
+    Quote
   </div>
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <p>A well-known quote, contained in a blockquote element.</p>
+      <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+    </blockquote>
+  </div>
+</div>
 }@else {
-  <div><h2>No Existe ningún usuario con sessión activo</h2>
-    <button type="button" class="btn btn-warning" (click)="goLogin()">ir a iniciar sesión</button>
-  </div>
+<div>
+  <h2>No Existe ningún usuario con sessión activo</h2>
+  <button type="button" class="btn btn-warning" (click)="goLogin()">ir a iniciar sesión</button>
+</div>
 }
 
 
@@ -220,55 +240,78 @@
   </div>
 </div>
 <!-- modal de confirmación de tarea -->
-<div class="modal" *ngIf="isTaskModalUpdateOpen" class="modal">
-  @if(tareaup){
-    <div class="modal-content">
+<div class="modal" *ngIf="isTaskModalUpdateOpen">
+  <div class="modal-content">
+    <ng-container *ngIf="tareaup; else noTask">
       <form [formGroup]="taskUpdateForm">
         <h2>Detalles de la Tarea</h2>
-      <p><strong>Título:</strong> {{ tareaup.titulo}}</p>
-      <label for="titulo">Título:</label>
-      <input formControlName="titulo" id="titulo" type="text">
-  
-      <p><strong>Descripción:</strong> {{ tareaup.descripcion}}</p>
-      <textarea formControlName="descripcion" id="descripcion"></textarea>
-  
-      <p><strong>Carga de trabajo:</strong> {{tareaup.carga}}</p>
-      <select formControlName="carga" id="carga">
-        <option value="5">Alto</option>
-        <option value="3">Medio</option>
-        <option value="1">Bajo</option>
-      </select>
-  
-      <p><strong>Fecha de inicio:</strong> {{ tareaup.fechaInicio }}</p>
-      <label for="fechaInicio">Fecha inicio:</label>
-      <input formControlName="fechaInicio" id="fechaInicio" type="date">
-  
-      <p><strong>Fecha entrega:</strong> {{tareaup.fechamax}}</p>
-      <label for="fechaMax">Fecha max:</label>
-      <input formControlName="fechaMax" id="fechaMax" type="date">
-  
-      <button type="submit" (click)="updateTask()" >Actualizar Tarea</button>
-      <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
-      </form>
-    </div>
-  }@else {
-    <div class="modal">
-      <div class="modal-content">
-        <h3 class="no-task-message">No ha seleccionado ninguna tarea para actualizar</h3>
+        <p><strong>Título:</strong> {{ tareaup.titulo }}</p>
+        <label for="titulo">Título:</label>
+        <input formControlName="titulo" id="titulo" type="text">
+
+        <p><strong>Descripción:</strong> {{ tareaup.descripcion }}</p>
+        <textarea formControlName="descripcion" id="descripcion"></textarea>
+
+        <p><strong>Carga de trabajo:</strong> {{ tareaup.carga }}</p>
+        <select formControlName="carga" id="carga">
+          <option value="5">Alto</option>
+          <option value="3">Medio</option>
+          <option value="1">Bajo</option>
+        </select>
+
+        <p><strong>Fecha de inicio:</strong> {{ tareaup.fechaInicio }}</p>
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input formControlName="fechaInicio" id="fechaInicio" type="date">
+
+        <p><strong>Fecha entrega:</strong> {{ tareaup.fechamax }}</p>
+        <label for="fechaMax">Fecha max:</label>
+        <input formControlName="fechaMax" id="fechaMax" type="date">
+
+        <button type="submit" (click)="updateTask()" [disabled]="taskUpdateForm.invalid">Actualizar Tarea</button>
         <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
-      </div>
-    </div>    
-  }
-<!-- modal actualizar imagen -->
+      </form>
+    </ng-container>
+    <ng-template #noTask>
+      <h3 class="no-task-message">No ha seleccionado ninguna tarea para actualizar</h3>
+      <button type="button" (click)="closeTaskEditModal()">Cerrar</button>
+    </ng-template>
+  </div>
 </div>
+
 <div class="modal-backdrop" *ngIf="showImageModal">
-  <div class="modal-content">
-    <span class="close-button" (click)="closeImageModal()"></span>
-    <h2>Actualizar Imagen de Perfil</h2>
-    <img [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'" alt="Imagen de perfil actual" class="profile-img" />
-    <input class="form-control" type="file" (change)="onImageSelected($event)" />
-    <button (click)="updateProfile()">Actualizar Imagen </button>
-    
-    <button class="alter" (click)="closeImageModal()"> Cerrar</button> 
+  <div class="modal-content-2">
+    <span class="close-button" (click)="closeImageModal()">&times;</span>
+
+
+    <h2 class="profile-title">Perfil</h2>
+    <!-- Encabezado del Perfil -->
+    <div class="profile-header">
+      <img
+        [src]="pimg && pimg !== 'http://localhost:8000null' ? pimg : 'http://localhost:8000/media/profile_images/defecto.jpg'"
+        alt="Imagen de perfil actual" class="profile-image-2" />
+    </div>
+
+    <div class="profile-details">
+      <div class="detail">
+        <h3></h3>
+        <p>{{ userData?.username }}</p>
+      </div>
+      <div class="detail">
+        <h3>Cargo</h3>
+        <p>{{ userData?.profile?.user_type }}</p>
+      </div>
+      <div class="detail">
+        <h3>Correo electrónico</h3>
+        <p>{{ userData?.email }}</p>
+      </div>
+    </div>
+    <h4>Ingrese la nueva imagen</h4>
+    <div class="profile-actions">
+
+      <input class="form-control" type="file" (change)="onImageSelected($event)" />
+
+      
+    </div>
+    <button class="btn-perf" [disabled]="!selectedImage" (click)="updateProfile()">Actualizar Imagen</button>
   </div>
 </div>

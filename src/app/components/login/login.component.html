@@ -8,12 +8,12 @@
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
   ></script>
 @defer () {
-  <div class="container mt-5">
+  <div class="container mt-8">
+    
     <div class="row justify-content-center">
-      <!-- Sección izquierda: Bienvenida -->
-      <div class="col-md-6 d-flex align-items-center">
+      <div class="col-md-4 d-flex align-items-center">
         <div>
-          <h2 class="text-primary">Bienvenido a nuestra plataforma</h2>
+          <h2 class="text-primary">Bienvenido TaskBlitz</h2>
           <p class="text-muted">
             Conéctate fácilmente y empieza a disfrutar de todas las ventajas de nuestra aplicación.
           </p>
@@ -21,21 +21,25 @@
       </div>
 
       <!-- Sección derecha: Formulario de Login -->
-      <div class="col-md-6">
+      <div class="col-md-7">
         <div class="card shadow-lg">
-          <div class="card-body p-4">
-            <h3 class="text-center mb-4">Iniciar Sesión</h3>
-            <form [formGroup]="loginForm" (ngSubmit)="login()">
-              <div class="mb-3">
-                <label for="username" class="form-label">Usuario</label>
-                <input
-                  id="username"
-                  formControlName="username"
-                  type="text"
-                  class="form-control"
-                  placeholder="Ingrese su usuario"
-                />
-              </div>
+          <div class="card-body p-8">
+
+                <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" alt="Logo" class="logo-img">
+
+
+              <h3 class="text-center mb-4">Iniciar Sesión</h3>
+              <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <div class="mb-3">
+                  <label for="username" class="form-label">Usuario</label>
+                  <input
+                    id="username"
+                    formControlName="username"
+                    type="text"
+                    class="form-control"
+                    placeholder="Ingrese su usuario"
+                  />
+                </div>
 
               <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
@@ -50,7 +54,7 @@
 
               <button
                 type="submit"
-                class="btn btn-primary w-100 mb-3"
+                class="btn btn-primary w-100 mb-4"
                 [disabled]="loginForm.invalid"
               >
                 Iniciar Sesión

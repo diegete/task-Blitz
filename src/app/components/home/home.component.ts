@@ -184,7 +184,7 @@ export class HomeComponent {
     return (cargaTrabajo / 10) * 100;
   }
   openImageModal(): void {
-    //console.log('Modal abierto');
+    console.log(this.userData);
     this.showImageModal = true;
   }
   
@@ -465,23 +465,28 @@ assignTask(): void {
       fechaInicio: this.taskUpdateForm.value.fechaInicio,  // Corrección de nombre
       fechaMax: this.taskUpdateForm.value.fechaMax         // Corrección de nombre
     };
-  
-    this.taskService.updateTask(tarea, token).subscribe(
-      (response) => {
-        alert('Tarea actualizada con éxito');
-        console.log(tarea)
-        const index = this.selectedProjectTasks.findIndex(t => t.id === tarea.id);
-        if (index !== -1) {
-          this.selectedProjectTasks[index] = tarea; // Actualizar la tarea en la lista
+    if (!tarea.titulo || !tarea.descripcion || !tarea.carga || !tarea.fechaInicio || !tarea.fechaMax || !tarea.proyecto){
+      this.taskService.updateTask(tarea, token).subscribe(
+        (response) => {
+          alert('Tarea actualizada con éxito');
+          console.log(tarea)
+          const index = this.selectedProjectTasks.findIndex(t => t.id === tarea.id);
+          if (index !== -1) {
+            this.selectedProjectTasks[index] = tarea; // Actualizar la tarea en la lista
+          }
+          this.closeTaskEditModal()
+        },
+        (error) => {
+          console.error('Error al actualizar la tarea:', error);
+          console.log(tarea)
+          alert('Hubo un error al actualizar la tarea');
         }
-        this.closeTaskEditModal()
-      },
-      (error) => {
-        console.error('Error al actualizar la tarea:', error);
-        console.log(tarea)
-        alert('Hubo un error al actualizar la tarea');
-      }
-    );
+      );
+    }else{
+      alert('No se encontró la tarea a actualizar')
+    }
+
+
   }
   updateProfile(): void {
     const formData = new FormData();
@@ -505,7 +510,7 @@ assignTask(): void {
             this.pimg = img
             this.pimgd = BACKEND_URL+'/media/profile_images/defecto.jpg'
             this.userData.profile.image = img
-            console.log('algo')
+            
           })
           // Aquí puedes actualizar `profileData` o mostrar un mensaje de éxito
         },
