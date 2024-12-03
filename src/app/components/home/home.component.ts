@@ -37,6 +37,7 @@ export class HomeComponent {
   selectedProjectTasks: any[] = [];
   isProjectModalOpen = false;
   isTaskModalOpen = false;
+  isMetricsModalOpen= false;
   isAssignTaskModalOpen = false;
   isTaskModalUpdateOpen = false;
   showTaskForm: boolean = false;
@@ -163,6 +164,12 @@ export class HomeComponent {
     this.isTaskModalOpen = false;
   }
 
+  openMetricModal(){
+    this.isMetricsModalOpen = true
+  }
+  closeMetricModal(){
+    this.isMetricsModalOpen = false
+  }
   openAssignTaskModal(): void {
     this.isAssignTaskModalOpen = true;
   }
@@ -530,49 +537,65 @@ assignTask(): void {
     return `conic-gradient(#4caf50 0% ${progress}%, #e0e0e0 ${progress}% 100%)`;
   }
 
-  exportToExcel() {
-    const metrics = this.selectedProject.metrics;
+  // exportToExcel() {
+  //   const metrics = this.selectedProject.metrics;
   
-    // Datos generales del proyecto
-    const data = [
-      { Métrica: 'Total de Tareas', Valor: metrics.total_tasks },
-      { Métrica: 'Tareas Completadas', Valor: metrics.completed_tasks },
-      { Métrica: 'Tareas en Progreso', Valor: metrics.inprogress_tasks },
-      { Métrica: 'Progreso (%)', Valor: metrics.progress },
-    ];
+  //   // Datos generales del proyecto
+  //   const data = [
+  //     { Métrica: 'Total de Tareas', Valor: metrics.total_tasks },
+  //     { Métrica: 'Tareas Completadas', Valor: metrics.completed_tasks },
+  //     { Métrica: 'Tareas en Progreso', Valor: metrics.inprogress_tasks },
+  //     { Métrica: 'Progreso (%)', Valor: metrics.progress },
+  //   ];
   
-    // Agregar métricas por miembro
-    this.selectedProject.members.forEach((member: any) => {
-      data.push({
-        Métrica: `Carga de ${member.username}`,
-        Valor: member.profile.cargaTrabajo > 0 ? member.profile.cargaTrabajo : 'No especificada',
-      });
-    });
+  //   // Agregar métricas por miembro
+  //   this.selectedProject.members.forEach((member: any) => {
+  //     data.push({
+  //       Métrica: `Carga de ${member.username}`,
+  //       Valor: member.profile.cargaTrabajo > 0 ? member.profile.cargaTrabajo : 'No especificada',
+  //     });
+  //   });
   
-    // Crear hoja de Excel
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Métricas');
+  //   // Crear hoja de Excel
+  //   const worksheet = XLSX.utils.json_to_sheet(data);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Métricas');
   
-    // Exportar archivo
-    XLSX.writeFile(workbook, `metricas_proyecto_${this.selectedProject.title}.xlsx`);
-  }
+  //   // Exportar archivo
+  //   XLSX.writeFile(workbook, `metricas_proyecto_${this.selectedProject.title}.xlsx`);
+  // }
   
   
   exportToPDF() {
     const doc = new jsPDF();
     const metrics = this.selectedProject.metrics;
   
+    // Obtener la fecha actual
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`; // Formato: DD/MM/YYYY
+  
     // Título
     doc.text('Métricas del Proyecto', 14, 20);
+  
+    // Agregar la fecha
+    doc.text(`Fecha: ${formattedDate}`, 14, 30);
   
     // Datos generales
     const tableData = [
       ['Total de Tareas', metrics.total_tasks],
-      ['Tareas en Progreso', metrics.inprogress_tasks],
+      ['Tareas en Progreso', metrics.inprogres_taks],
       ['Tareas Completadas', metrics.completed_tasks],
       ['Progreso (%)', `${metrics.progress}%`],
     ];
+  
+    // Agregar los nombres de las tareas en progreso
+    const inProgressTasks = metrics.inprogress_task_names.length > 0 ? metrics.inprogress_task_names.join(', ') : 'Ninguna';
+    const completedTasks = metrics.completed_task_names.length > 0 ? metrics.completed_task_names.join(', ') : 'Ninguna';
+  
+    tableData.push(
+      ['Tareas en Progreso', inProgressTasks],
+      ['Tareas Completadas', completedTasks]
+    );
   
     // Agregar métricas por miembro
     this.selectedProject.members.forEach((member: any) => {
@@ -586,11 +609,28 @@ assignTask(): void {
     (doc as any).autoTable({
       head: [['Métrica', 'Valor']],
       body: tableData,
-      startY: 30, // Posición inicial en Y
+      startY: 40, // Ajustar para que no se sobreponga con la fecha
     });
   
     // Guardar el PDF
     doc.save(`metricas_proyecto_${this.selectedProject.title}.pdf`);
+  }
+  
+  
+
+
+
+  getPrioridadTexto(prioridad: number): string {
+    switch (prioridad) {
+      case 1:
+        return 'Baja';
+      case 3:
+        return 'Media';
+      case 5:
+        return 'Alta';
+      default:
+        return 'Desconocida'; // Opcional: manejar casos fuera de rango
+    }
   }
   
 }

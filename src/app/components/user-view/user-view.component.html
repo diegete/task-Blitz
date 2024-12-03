@@ -9,7 +9,7 @@
 @if (userData && userData.profile.user_type == 'empleado') {
   <header class="navbar">
     <div class="logo">
-        <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" alt="Logo" class="logo-img">
+        <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" alt="Logo" class="logo-img-2">
         <a class="a-b">Bienvenido: {{ userData?.username }}</a>
     </div>
     <div class="nav-right">
@@ -103,7 +103,17 @@
         
 
 </div>
-
+<div class="card">
+  <div class="card-header">
+    Quote
+  </div>
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <p>A well-known quote, contained in a blockquote element.</p>
+      <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+    </blockquote>
+  </div>
+</div>
 
 }@else {
 <p>No ha iniciado sesión.</p>

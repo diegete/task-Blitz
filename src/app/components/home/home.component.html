@@ -9,7 +9,7 @@
 
 <header class="navbar">
   @if (userData && userData.profile.user_type =='jefe') {
-    <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" class="logo-img">
+    <img src="http://localhost:8000/media/profile_images/TaskBlitz.png" class="logo-img-2">
   <div class="logo">
 
     <a class="a-b">Bienvenido: {{ userData?.username }}</a>
@@ -17,7 +17,10 @@
   </div>
   <div class="nav-right">
     <nav class="nav-links">
-      <a>Ver Metricas</a>
+      @if (selectedProject) {
+        <a (click)="openMetricModal()">Ver Metricas</a>
+      }
+     
       <a (click)="openImageModal()">Ver Perfil</a>
 
 
@@ -55,7 +58,7 @@
     <ul>
       <li *ngFor="let proyecto of userData?.proyectos" (click)="selectProject(proyecto)">
         {{ proyecto.title }}
-        <h6> Prioridad:{{ proyecto.prioridad}}</h6>
+        <h6> Prioridad: {{ getPrioridadTexto(proyecto.prioridad) }}</h6>
       </li>
     </ul>
 
@@ -151,48 +154,10 @@
     </div>
   </div>
 </div>
-<div *ngIf="selectedProject">
-  <h2> Metricas del {{ selectedProject.title }}</h2>
+
+
 
   <!-- Mostrar métricas del proyecto -->
-  <div class="col-md-12 mb-8">
-    <div class="card text-center">
-      <!-- Gráfico Circular de Progreso -->
-      <div class="progress-section">
-        <div class="card-header">
-          <p><strong>Progreso General:</strong></p>
-        </div>
-        <div class="card-body">
-          <div class="progress-circle-container">
-            <div class="progress-circle" [style.background]="getCircularProgress(selectedProject?.metrics?.progress)">
-              <span>{{ selectedProject?.metrics?.progress }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gráfico de Barras o Anillos -->
-      <div class="tasks-breakdown">
-        <p><strong>Desglose de Tareas:</strong></p>
-
-        <div class="legend">
-          <span class="pending">Total de tareas: {{ selectedProject?.metrics?.total_tasks }}</span>
-          <span class="in-progress">En Progreso: {{ selectedProject?.metrics?.inprogres_taks }}</span>
-          <span class="completed">Completadas: {{ selectedProject?.metrics?.completed_tasks }}</span>
-        </div>
-      </div>
-      <div class="card-footer text-body-secondary">
-        <button class="btn btn-primary" class="btn btn-primary" (click)="exportToExcel()">Exportar a Excel</button>
-        <button class="btn btn-primary" class="btn btn-primary" (click)="exportToPDF()">Exportar a PDF</button>
-      </div>
-
-    </div>
-  </div>
-
-
-
-</div>
-
 <ng-template #noProyectos>
   <p>No tienes proyectos disponibles.</p>
 </ng-template>
@@ -214,6 +179,53 @@
   <button type="button" class="btn btn-warning" (click)="goLogin()">ir a iniciar sesión</button>
 </div>
 }
+<!-- modal metricas -->
+<div *ngIf="isMetricsModalOpen && selectedProject" class="modal-metrics">
+
+  <div class="modal-content-m">
+    <div class="header-container">
+      <h2 class="text-meticas">Métricas del {{ selectedProject.title }}</h2>
+
+        <!-- <button class="btn-metricas" (click)="exportToExcel()">Exportar a Excel</button> -->
+        <button class="btn-metricas" (click)="exportToPDF()">Exportar a PDF</button>
+        <button class="btn-metricas-cerrar"  (click)="closeMetricModal()">Cerrar</button>
+
+    </div>
+  
+    <div class="col-md-12 mb-8">
+      <div class="card text-center">
+        <!-- Gráfico Circular de Progreso -->
+        <div class="progress-section">
+          <div class="card-header">
+            <p><strong>Progreso General:</strong></p>
+          </div>
+          <div class="card-body">
+            <div class="progress-circle-container">
+              <div class="progress-circle" [style.background]="getCircularProgress(selectedProject?.metrics?.progress)">
+                <span>{{ selectedProject?.metrics?.progress }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Gráfico de Barras o Anillos -->
+        <div class="tasks-breakdown">
+          <p><strong>Desglose de Tareas:</strong></p>
+  
+          <div class="legend">
+            <span class="pending">Total de tareas: {{ selectedProject?.metrics?.total_tasks }}</span>
+            <span class="in-progress">En Progreso: {{ selectedProject?.metrics?.inprogres_taks }}</span>
+            <span class="completed">Completadas: {{ selectedProject?.metrics?.completed_tasks }}</span>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
 
 
 <!-- Modal para enviar invitaciones -->
