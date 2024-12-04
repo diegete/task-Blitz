@@ -81,25 +81,35 @@ export class LoginComponent {
   
    
   createUser() {
+    // Asignar valores del formulario a los datos del usuario
     this.userData.username = this.modalForm.value.username;
     this.userData.email = this.modalForm.value.email;
     this.userData.password = this.modalForm.value.password;
     this.userData.profile.user_type = this.modalForm.value.user_type;
-
-    this.usuarioService.createUser(this.userData).subscribe(response => {
-      console.log('Usuario creado:', response);
-      this.resetForm(); 
-      this.showSuccessNotification(); 
-      alert('Usuario creado')
-      this.closeModal()
-      this.router.navigate(['/login']);
-    }, error => {
-     
-      console.error('Error al crear usuario:', error, this.modalForm.value);
-    });
-
-    
+  
+    // Llamar al servicio para crear el usuario
+    this.usuarioService.createUser(this.userData).subscribe(
+      (response) => {
+        console.log('Usuario creado:', response);
+        this.resetForm(); 
+        this.showSuccessNotification(); 
+        alert('Usuario creado exitosamente.');
+        this.closeModal();
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        // Verificar si el error es por un correo ya registrado
+        if (error.status === 400 && error.error?.error === "El correo ya está registrado.") {
+          alert('Error: El correo ya está registrado. Por favor, utiliza uno diferente.');
+        } else {
+          // Manejar otros errores
+          console.error('Error al crear usuario:', error);
+          alert('Ocurrió un error al intentar crear el usuario. Inténtalo de nuevo más tarde.');
+        }
+      }
+    );
   }
+  
   forgot(){
     this.router.navigate(['/auth/password-reset']);
   }
