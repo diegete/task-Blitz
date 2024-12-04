@@ -162,17 +162,49 @@
   <p>No tienes proyectos disponibles.</p>
 </ng-template>
 <!-- footer v1 -->
-<div class="card">
-  <div class="card-header">
-    Quote
+<footer class="bg-light text-center text-lg-start border-top">
+  <!-- Upper section with logo and description -->
+  <div class="container p-4">
+    <div class="row">
+      <!-- Logo and description -->
+      <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+        <div class="d-flex align-items-center mb-3">
+          <img
+            src="http://localhost:8000/media/profile_images/TaskBlitz.png"
+            alt="TaskBlitz Logo"
+            class="img-fluid me-2"
+            style="max-width: 50px;"
+          />
+          <h5 class="text-primary fw-bold m-0">TaskBlitz</h5>
+        </div>
+        <p class="text-muted">
+          Simplifica tu trabajo con nuestra plataforma de gestión de tareas colaborativas.
+        </p>
+      </div>
+      <!-- Links -->
+      <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+        <ul class="list-unstyled">
+        </ul>
+      </div>
+      <!-- Contact Info -->
+      <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+        <h6 class="text-uppercase fw-bold" style="margin-left: 300px;">Contacto</h6>
+        <p class="text-muted mb-1">
+          <i class="bi bi-telephone me-2" style="margin-left: 290px;" ></i>+56945059350
+        </p>
+        <p class="text-muted">
+          <i class="bi bi-envelope me-2"style="margin-left: 290px;"></i>soportetaskblitz.com
+        </p>
+      </div>
+    </div>
   </div>
-  <div class="card-body">
-    <blockquote class="blockquote mb-0">
-      <p>A well-known quote, contained in a blockquote element.</p>
-      <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-    </blockquote>
+
+  <!-- Lower section with copyright -->
+  <div class="text-center p-3 bg-primary text-white">
+    © 2024 TaskBlitz - Todos los derechos reservados.
   </div>
-</div>
+</footer>
+
 }@else {
 <div>
   <h2>No Existe ningún usuario con sessión activo</h2>

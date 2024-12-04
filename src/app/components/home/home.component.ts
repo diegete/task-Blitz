@@ -287,7 +287,7 @@ createTask(): void {
       
       // Actualizar la lista de tareas del proyecto seleccionado
       this.selectedProjectTasks.push(nuevaTarea);
-
+      this.taskForm.reset();
       this.closeTaskModal();
       alert('Se ha creado la tarea con éxito');
     });
@@ -583,27 +583,35 @@ assignTask(): void {
     // Datos generales
     const tableData = [
       ['Total de Tareas', metrics.total_tasks],
-      ['Tareas en Progreso', metrics.inprogres_taks],
-      ['Tareas Completadas', metrics.completed_tasks],
       ['Progreso (%)', `${metrics.progress}%`],
     ];
   
-    // Agregar los nombres de las tareas en progreso
+    // Agregar los nombres de las tareas en progreso, completadas, no asignadas y atrasadas
     const inProgressTasks = metrics.inprogress_task_names.length > 0 ? metrics.inprogress_task_names.join(', ') : 'Ninguna';
     const completedTasks = metrics.completed_task_names.length > 0 ? metrics.completed_task_names.join(', ') : 'Ninguna';
+    const noAssignedTasks = metrics.no_assigned_task_names.length > 0 ? metrics.no_assigned_task_names.join(', ') : 'Ninguna';
+    const atrasadas = metrics.overdue_task_names.length > 0 ? metrics.overdue_task_names.join(', ') : 'Ninguna';
   
     tableData.push(
       ['Tareas en Progreso', inProgressTasks],
-      ['Tareas Completadas', completedTasks]
+      ['Tareas Completadas', completedTasks],
+      ['Tareas Sin Asignar', noAssignedTasks],
+      ['Tareas Atrasadas', atrasadas],
     );
   
-    // Agregar métricas por miembro
-    this.selectedProject.members.forEach((member: any) => {
-      tableData.push([
-        `Carga de ${member.username}`,
-        member.profile.cargaTrabajo || 'No especificada',
-      ]);
-    });
+    // Agregar detalles de las asignaciones de tareas
+    if (metrics.assigned_task_details.length > 0) {
+      metrics.assigned_task_details.forEach((task: any) => {
+        tableData.push([
+          `Tarea: ${task.tarea}`,
+          `Asignada a: ${task.usuario || 'No asignada'}`,
+        ]);
+      });
+    } else {
+      tableData.push(['Tareas Asignadas', 'No hay tareas asignadas']);
+    }
+  ;
+
   
     // Agregar tabla con autoTable
     (doc as any).autoTable({
@@ -615,6 +623,8 @@ assignTask(): void {
     // Guardar el PDF
     doc.save(`metricas_proyecto_${this.selectedProject.title}.pdf`);
   }
+  
+  
   
   
 
